@@ -1,5 +1,4 @@
 from enum import Enum
-import csv
 import sys
 import math
 
@@ -15,10 +14,10 @@ def _import_data(data):
         "label": []
     }
     path = ""
-    if data == "train":
-        path = './car/train.csv'
-    else:
+    if data == "test":
         path = './car/test.csv'
+    else:
+        path = './car/train.csv'
 
     with open(path, 'r') as f:
         for line in f:
@@ -33,16 +32,27 @@ def _import_data(data):
     return s
 
 
+def _test_small_example_data():
+    return {
+        "buying": ["low", "med", "high"],
+        "maintenance": ["high", "high", "high"],
+        "doors": ["5more", "5more", "5more"],
+        "persons": ["4", "4", "4"],
+        "lug_boot": ["med", "med", "med"],
+        "safety": ["high", "high", "high"],
+        "label": ["vgood", "good", "acc"]
+    }
+
+
 def _train_data(s, purity='ig', max_depth=0):
     tree = Tree(purity, max_depth)
     attributes = [Attribute.buying, Attribute.maintenance, Attribute.doors,
                   Attribute.persons, Attribute.lug_boot, Attribute.safety]
     tree.set_root(_id3(s, None, attributes, purity, 1, max_depth))
-    print("DONE")
     return tree
 
 
-def _predict_train(s, root):
+def _predict(s, root):
     prediction = 0
     for index in range(len(s["label"])):
         example = {
@@ -59,17 +69,13 @@ def _predict_train(s, root):
     return prediction/len(s["label"])
 
 
-def _predict_test():
-    return
-
-
 def _predict_example(example, node):
     if not node.is_leaf:
         child = node.branches[example[node.attribute.name]]
         return _predict_example(example, child)
     else:
-        if node.label == example["label"]: return 1
-        else: return 0
+        if node.label == example["label"]: return 0
+        else: return 1
 
 
 def _check_tree(node, attributes, branches, level):
@@ -91,7 +97,7 @@ def _check_tree(node, attributes, branches, level):
 
 
 def _id3(s, parent, attributes, purity, level, max_depth):
-    if s["label"].count(s["label"][0]) == len(s):
+    if s["label"].count(s["label"][0]) == len(s["label"]):
         node = Node(s, parent, True)
         node.set_label(s["label"][0])
         return node
@@ -104,21 +110,21 @@ def _id3(s, parent, attributes, purity, level, max_depth):
     else:
         node = Node(s, parent, False)
         _split(purity, node, attributes)
-
         for value in node.attribute.value:
-            s_v = _find_s_v(s, node.attribute, value)
+            if value != ".":
+                s_v = _find_s_v(s, node.attribute, value)
 
-            if len(s_v["label"]) == 0:
-                label = _find_majority_label(s["label"])
-                child = Node({}, node, True)
-                child.set_label(label)
-                node.add_branch(value, child)
+                if len(s_v["label"]) == 0:
+                    label = _find_majority_label(s["label"])
+                    child = Node({}, node, True)
+                    child.set_label(label)
+                    node.add_branch(value, child)
 
-            else:
-                copy = attributes.copy()
-                copy.remove(node.attribute)
-                child = _id3(s_v, node, copy, purity, level + 1, max_depth)
-                node.add_branch(value, child)
+                else:
+                    copy = attributes.copy()
+                    copy.remove(node.attribute)
+                    child = _id3(s_v, node, copy, purity, level + 1, max_depth)
+                    node.add_branch(value, child)
 
         return node
 
@@ -150,7 +156,8 @@ def _find_s_v(s, attribute, value):
 
 
 def _find_num_of_s_l(s, label):
-    return len([i for i, x in enumerate(s["label"]) if x == label])
+    temp = len([i for i, x in enumerate(s["label"]) if x == label])
+    return temp
 
 
 def _split(purity, node, attributes):
@@ -168,9 +175,9 @@ def _calculate_gain(s, attribute, purity):
         s_v = _find_s_v(s, attribute, value)
         if len(s_v["label"]) != 0:
             scalar = len(s_v["label"]) / len(s["label"])
-            purity = _calculate_purity(s_v, purity)
-            if purity != 0:
-                gain -= scalar * purity
+            p = _calculate_purity(s_v, purity)
+            if p != 0:
+                gain -= scalar * p
     return gain
 
 
@@ -185,11 +192,9 @@ def _calculate_entropy(s):
     entropy = 0.0
     for label in labels:
         num_of_s_l = _find_num_of_s_l(s, label)
-        if num_of_s_l == 0:
-            return 0.0
-
-        p_l = num_of_s_l / len(s["label"])
-        entropy -= p_l * math.log(p_l, 2)
+        if num_of_s_l != 0:
+            p_l = num_of_s_l / len(s["label"])
+            entropy -= p_l * math.log(p_l, 2)
     return entropy
 
 
@@ -252,6 +257,8 @@ class Node:
 
 if __name__ == '__main__':
     train_data = _import_data("train")
+    test_data = _import_data("test")
+    # train_data = _test_small_example_data()
     tree = None
 
     if len(sys.argv) == 2:
@@ -274,15 +281,8 @@ if __name__ == '__main__':
 
     else:
         tree = _train_data(train_data)
-        
-    print(_predict_train(train_data, tree.root))
-    # example1 = {
-    #     "buying": "low",
-    #     "maintenance": "high",
-    #     "doors": "5more",
-    #     "persons": "4",
-    #     "lug_boot": "med",
-    #     "safety": "high",
-    #     "label": "vgood"
-    # }
-    # print(_predict_example(example1, tree.root))
+
+    # _check_tree(tree.root, [], [], 1)
+    print(_predict(train_data, tree.root))
+    print(_predict(test_data, tree.root))
+
