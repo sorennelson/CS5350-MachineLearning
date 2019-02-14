@@ -1,183 +1,181 @@
-from enum import Enum
 import sys
 import math
 
+car_attributes = [
+    ["vhigh", "high", "med", "low"],
+    ["vhigh", "high", "med", "low", "."],
+    ["2", "3", "4", "5more"],
+    ["2", "4", "more"],
+    ["small", "med", "big"],
+    ["low", "med", "high"]
+]
 
-def _import_data(data):
-    s = {
-        "buying": [],
-        "maintenance": [],
-        "doors": [],
-        "persons": [],
-        "lug_boot": [],
-        "safety": [],
-        "label": []
-    }
-    path = ""
-    if data == "test":
-        path = './car/test.csv'
-    else:
-        path = './car/train.csv'
+car_labels = ["unacc", "acc", "good", "vgood"]
 
+
+def _import_data(path):
+    s = []
     with open(path, 'r') as f:
+        num_columns = 0
         for line in f:
             terms = line.strip().split(',')
-            s["buying"].append(terms[0])
-            s["maintenance"].append(terms[1])
-            s["doors"].append(terms[2])
-            s["persons"].append(terms[3])
-            s["lug_boot"].append(terms[4])
-            s["safety"].append(terms[5])
-            s["label"].append(terms[6])
+            num_columns = len(terms)
+            break
+
+        s = [[] for _ in range(num_columns)]
+
+        for line in f:
+            terms = line.strip().split(',')
+            for i in range(num_columns):
+                s[i].append(terms[i])
     return s
 
 
-def _test_small_example_data():
-    return {
-        "buying": ["low", "med", "high"],
-        "maintenance": ["high", "high", "high"],
-        "doors": ["5more", "5more", "5more"],
-        "persons": ["4", "4", "4"],
-        "lug_boot": ["med", "med", "med"],
-        "safety": ["high", "high", "high"],
-        "label": ["vgood", "good", "acc"]
-    }
+def _get_small_car_example_data():
+    return [
+        ["low", "med", "high"],
+        ["high", "high", "high"],
+        ["5more", "5more", "5more"],
+        ["4", "4", "4"],
+        ["med", "med", "med"],
+        ["high", "high", "high"],
+        ["vgood", "good", "acc"]
+    ]
 
 
-def _train_data(s, purity='ig', max_depth=0):
+def _train_data(s, purity, max_depth=-1):
     tree = Tree(purity, max_depth)
-    attributes = [Attribute.buying, Attribute.maintenance, Attribute.doors,
-                  Attribute.persons, Attribute.lug_boot, Attribute.safety]
-    tree.set_root(_id3(s, None, attributes, purity, 1, max_depth))
+    tree.set_root(_id3(s, None, attributes.copy(), purity, 1, max_depth))
     return tree
 
 
 def _predict(s, root):
-    prediction = 0
-    for index in range(len(s["label"])):
-        example = {
-            "buying": s["buying"][index],
-            "maintenance": s["maintenance"][index],
-            "doors": s["doors"][index],
-            "persons": s["persons"][index],
-            "lug_boot": s["lug_boot"][index],
-            "safety": s["safety"][index],
-            "label": s["label"][index]
-        }
-        prediction += _predict_example(example, root)
+    correct_count = 0
+    for index in range(len(s[-1])):
+        example = []
+        i = 0
+        for l in s:
+            example.append(l[index])
+        correct_count += _predict_example(example, root)
 
-    return prediction/len(s["label"])
+    return correct_count/len(s[-1])
 
 
 def _predict_example(example, node):
     if not node.is_leaf:
-        child = node.branches[example[node.attribute.name]]
+        a_index = attributes.index(node.attribute)
+        child = node.branches[example[a_index]]
         return _predict_example(example, child)
     else:
-        if node.label == example["label"]: return 0
+        if node.label == example[-1]: return 0
         else: return 1
 
 
-def _check_tree(node, attributes, branches, level):
+def _check_tree(node, a, branches, level):
     if node.is_leaf:
         astring = ""
         bstring = ""
-        for a in attributes:
-            astring += a + ", "
+        for i in a:
+            astring += str(i) + ", "
         for b in branches:
             bstring += b + ", "
         print("ATTRIBUTES: ", astring, "BRANCHES: ", bstring, "LABEL: ", node.label, "LEVEL: ", level)
 
     else:
-        attributes.append(node.attribute.name)
+        a.append(node.attribute)
         for branch, child in node.branches.items():
             copy = branches.copy()
             copy.append(branch)
-            _check_tree(child, attributes.copy(), copy, level+1)
+            _check_tree(child, a.copy(), copy, level+1)
 
 
-def _id3(s, parent, attributes, purity, level, max_depth):
-    if s["label"].count(s["label"][0]) == len(s["label"]):
+def _id3(s, parent, a, purity, level, max_depth):
+    if s[-1].count(s[-1][0]) == len(s[-1]):
         node = Node(s, parent, True)
-        node.set_label(s["label"][0])
+        node.set_label(s[-1][0])
         return node
 
-    elif len(attributes) == 0 or level == max_depth:
+    elif len(a) == 0 or level == max_depth:
         node = Node(s, parent, True)
-        node.set_label(_find_majority_label(s["label"]))
+        node.set_label(_find_majority_label(s[-1]))
         return node
 
     else:
         node = Node(s, parent, False)
-        _split(purity, node, attributes)
-        for value in node.attribute.value:
-            if value != ".":
-                s_v = _find_s_v(s, node.attribute, value)
+        _split(purity, node, a)
 
-                if len(s_v["label"]) == 0:
-                    label = _find_majority_label(s["label"])
-                    child = Node({}, node, True)
-                    child.set_label(label)
-                    node.add_branch(value, child)
+        for value in node.attribute:
+            s_v = _find_s_v(node, node.attribute, value)
 
-                else:
-                    copy = attributes.copy()
-                    copy.remove(node.attribute)
-                    child = _id3(s_v, node, copy, purity, level + 1, max_depth)
-                    node.add_branch(value, child)
+            if len(s_v[-1]) == 0:
+                label = _find_majority_label(s[-1])
+                child = Node({}, node, True)
+                child.set_label(label)
+                node.add_branch(value, child)
+
+            else:
+                copy = a.copy()
+                copy.remove(node.attribute)
+                child = _id3(s_v, node, copy, purity, level + 1, max_depth)
+                node.add_branch(value, child)
 
         return node
 
 
-def _find_majority_label(all_labels):
-    labels = ["unacc", "acc", "good", "vgood"]
-    count = [0, 0, 0, 0]
-    for label in all_labels:
-        if   label == labels[0]: count[0] += 1
-        elif label == labels[1]: count[1] += 1
-        elif label == labels[2]: count[2] += 1
-        elif label == labels[3]: count[3] += 1
+def _find_majority_label(s_labels):
+    count = [0 for _ in range(len(labels))]
+    for label in s_labels:
+        for i in range(len(labels)):
+            if label == labels[i]:
+                count[i] += 1
+                break
+
     index = count.index(max(count))
     return labels[index]
 
 
-def _find_s_v(s, attribute, value):
-    indices = [i for i, x in enumerate(s[attribute.name]) if x == value]
-    s_v = s.copy()
+def _find_s_v(node, attribute, value):
+    a_index = attributes.index(attribute)
+    indices = [i for i, x in enumerate(node.s[a_index]) if x == value]
+    s_v = node.s.copy()
 
-    for key, feature_list in s.items():
+    for i in range(len(node.s)):
         new_feature_list = []
 
         for index in indices:
-            new_feature_list.append(feature_list[index])
-        s_v[key] = new_feature_list
+            new_feature_list.append(node.s[i][index])
+        s_v[i] = new_feature_list
 
     return s_v
 
 
 def _find_num_of_s_l(s, label):
-    temp = len([i for i, x in enumerate(s["label"]) if x == label])
-    return temp
+    return len([i for i, x in enumerate(s[-1]) if x == label])
 
 
-def _split(purity, node, attributes):
+def _split(purity, node, a):
     gains = []
-    for i in range(len(attributes)):
-        gains.append(_calculate_gain(node.s, attributes[i], purity))
-    index = gains.index(max(gains))
-    node.set_attribute(attributes[index])
+    for i in range(len(a)):
+        gains.append(_calculate_gain(node, a[i], purity))
+    max_index = gains.index(max(gains))
+
+    node.set_attribute(a[max_index])
 
 
-def _calculate_gain(s, attribute, purity):
+def _calculate_gain(node, attribute, purity):
     gain = 0.0
-    gain += _calculate_purity(s, purity)
-    for value in attribute.value:
-        s_v = _find_s_v(s, attribute, value)
-        if len(s_v["label"]) != 0:
-            scalar = len(s_v["label"]) / len(s["label"])
+    gain += _calculate_purity(node.s, purity)
+    #print(attribute)
+    for value in attribute:
+        s_v = _find_s_v(node, attribute, value)
+
+        if len(s_v[-1]) != 0:
+            scalar = len(s_v[-1]) / len(node.s[-1])
             p = _calculate_purity(s_v, purity)
+
             if p != 0:
                 gain -= scalar * p
+
     return gain
 
 
@@ -188,41 +186,29 @@ def _calculate_purity(s, purity):
 
 
 def _calculate_entropy(s):
-    labels = ["unacc", "acc", "good", "vgood"]
     entropy = 0.0
     for label in labels:
         num_of_s_l = _find_num_of_s_l(s, label)
         if num_of_s_l != 0:
-            p_l = num_of_s_l / len(s["label"])
+            p_l = num_of_s_l / len(s[-1])
             entropy -= p_l * math.log(p_l, 2)
     return entropy
 
 
 def _calculate_majority_error(s):
-    majority_label = _find_majority_label(s["label"])
-    me = 1 - _find_num_of_s_l(s, majority_label) / len(s["label"])
+    majority_label = _find_majority_label(s[-1])
+    me = 1 - _find_num_of_s_l(s, majority_label) / len(s[-1])
     return me
 
 
 def _calculate_gini_index(s):
-    labels = ["unacc", "acc", "good", "vgood"]
     gi = 1.0
     for label in labels:
         num_of_s_l = _find_num_of_s_l(s, label)
         if num_of_s_l != 0:
-            p_l = num_of_s_l / len(s["label"])
+            p_l = num_of_s_l / len(s[-1])
             gi -= p_l**2
     return gi
-
-
-class Attribute(Enum):
-    default = []
-    buying = ["vhigh", "high", "med", "low"]
-    maintenance = ["vhigh", "high", "med", "low", "."]
-    doors = ["2", "3", "4", "5more"]
-    persons = ["2", "4", "more"]
-    lug_boot = ["small", "med", "big"]
-    safety = ["low", "med", "high"]
 
 
 class Tree:
@@ -242,7 +228,7 @@ class Node:
         self.parent = parent
         self.is_leaf = is_leaf
         self.branches = {}
-        self.attribute = Attribute.default
+        self.attribute = -1
         self.label = None
 
     def set_attribute(self, attribute):
@@ -256,33 +242,26 @@ class Node:
 
 
 if __name__ == '__main__':
-    train_data = _import_data("train")
-    test_data = _import_data("test")
-    # train_data = _test_small_example_data()
-    tree = None
-
-    if len(sys.argv) == 2:
-        try:
-            depth = int(sys.argv[1])
-            tree = _train_data(train_data, max_depth=depth)
-        except ValueError:
-            purity_type = sys.argv[1]
-            tree = _train_data(train_data, purity=purity_type)
-
-    elif (len(sys.argv)) == 3:
-        try:
-            depth = int(sys.argv[1])
-            purity_type = sys.argv[2]
-            tree = _train_data(train_data, max_depth=depth, purity=purity_type)
-        except ValueError:
-            purity_type = sys.argv[1]
-            depth = int(sys.argv[2])
-            tree = _train_data(train_data, max_depth=depth, purity=purity_type)
+    data_type = sys.argv[1]
+    purity_type = sys.argv[2]
+    if len(sys.argv) > 3:
+        depth = int(sys.argv[3])
 
     else:
-        tree = _train_data(train_data)
+        depth = -1
 
-    # _check_tree(tree.root, [], [], 1)
+    train_data = _import_data("./" + data_type + "/train.csv")
+    #train_data = _get_small_car_example_data()
+    test_data = _import_data("./" + data_type + "/test.csv")
+
+    attributes = []
+    if data_type == "car":
+        attributes = car_attributes
+        labels = car_labels
+
+    tree = _train_data(train_data, purity=purity_type, max_depth=depth)
+
+    #_check_tree(tree.root, [], [], 1)
     print(_predict(train_data, tree.root))
     print(_predict(test_data, tree.root))
 
