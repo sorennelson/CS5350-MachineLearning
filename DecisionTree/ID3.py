@@ -1,5 +1,6 @@
 import sys
 import math
+import statistics
 
 car_attributes = [
     ["vhigh", "high", "med", "low"],
@@ -12,10 +13,43 @@ car_attributes = [
 
 car_labels = ["unacc", "acc", "good", "vgood"]
 
+bank_attributes = [
+    ["numeric", "eunder", "over"],
+    ["admin.", "unknown", "unemployed", "management", "housemaid", "entrepreneur", "student",
+        "blue-collar", "self-employed", "retired", "technician", "services"],
+    ["married", "divorced", "single"],
+    ["unknown", "secondary", "primary", "tertiary"],
+    ["yes", "no"],
+    ["numeric", "eunder", "over"],
+    ["yes", "no"],
+    ["yes", "no"],
+    ["unknown", "telephone", "cellular"],
+    ["numeric", "eunder", "over"],
+    ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"],
+    ["numeric", "eunder", "over"],
+    ["numeric", "eunder", "over"],
+    ["numeric", "eunder", "over"],
+    ["numeric", "eunder", "over"],
+    ["unknown", "other", "failure", "success"]
+]
 
-def _import_data(path):
+bank_labels = ["yes", "no"]
+
+
+def _import_data(path, train):
+    """
+    Imports the data from a csv file into a list of examples.
+
+    :param path: the data type to import. Either car or bank.
+    :return: the data as a list of lists that contain all the example values for an attribute or label (at s[-1]).
+    """
     s = []
-    with open(path, 'r') as f:
+    fp = "./" + path
+    if train:
+        fp = path + "/train.csv"
+    else:
+        fp = path + "/test.csv"
+    with open(fp, 'r') as f:
         num_columns = 0
         for line in f:
             terms = line.strip().split(',')
@@ -28,10 +62,57 @@ def _import_data(path):
             terms = line.strip().split(',')
             for i in range(num_columns):
                 s[i].append(terms[i])
+    if path == "bank":
+        s = _change_numeric_attributes_to_binary(s)
     return s
 
 
+def _change_numeric_attributes_to_binary(s):
+    for i in range(len(attributes)):
+
+        if attributes[i][0] == "numeric":
+            median = _get_median(s[i])
+            attributes[i][0] = str(median)
+            s[i] = _update_numeric_attributes(s[i], attributes[i])
+
+        elif _is_numeric_attribute(attributes[i]):
+            s[i] = _update_numeric_attributes(s[i], attributes[i])
+    return s
+
+
+def _is_numeric_attribute(attribute):
+    """
+    Check if a given attribute in the bank list is numeric
+    :param attribute:
+    :return: Boolean
+    """
+    try:
+        int(attribute[0])
+        return True
+    except ValueError:
+        return False
+
+
+
+def _get_median(s_a):
+    s_a_ints = list(map(int, s_a))  # convert from strings to ints
+    median = statistics.median(s_a_ints)
+    return median
+
+
+def _update_numeric_attributes(s_a, attribute):
+    for i in range(len(s_a)):
+        if int(s_a[i]) < int(attribute[0]): s_a[i] = "over"
+        else: s_a[i] = "eunder"
+    return s_a
+
+
 def _get_small_car_example_data():
+    """
+    Gets a list of 3 examples formatted like s.
+
+    :return: the examples
+    """
     return [
         ["low", "med", "high"],
         ["high", "high", "high"],
@@ -43,17 +124,56 @@ def _get_small_car_example_data():
     ]
 
 
+def _get_small_bank_example_data():
+    s = [
+        ["48","48","53"],
+        ["services","blue-collar","technician"],
+        ["married", "married", "married"],
+        ["secondary", "secondary", "secondary"],
+        ["no", "no", "no"],
+        ["0", "0", "0"],
+        ["yes", "yes", "yes"],
+        ["no", "no", "no"],
+        ["unknown", "unknown", "unknown"],
+        ["5", "5", "5"],
+        ["may", "may", "may"],
+        ["114", "114", "114"],
+        ["2", "2", "2"],
+        ["-1", "-1", "-1"],
+        ["0", "0", "0"],
+        ["unknown", "unknown", "unknown"],
+        ["no", "no", "yes"],
+    ]
+    s = _change_numeric_attributes_to_binary(s)
+    return s
+
+
 def _train_data(s, purity, max_depth=-1):
+    """
+    Trains a decision tree with the given data, the ID3 algorithm, and the type of purity function given.
+
+    :param s: The imported data.
+    :param purity: The type of purity function to use.
+                    "ig" for information gain. "me" for Majority Error. "gi" for Gini Index.
+    :param max_depth: The max depth of the tree. -1 sets no bounds.
+    :return: The tree created.by the ID3 algorithm.
+    """
     tree = Tree(purity, max_depth)
     tree.set_root(_id3(s, None, attributes.copy(), purity, 1, max_depth))
     return tree
 
 
 def _predict(s, root):
+    """
+    Finds the prediction error based on the given data and the given tree (root). Calculated by: 1 - correct count / number of examples
+
+    :param s: The imported data.
+    :param root: The root of the learned tree.
+    :return: the prediction error.
+    """
     correct_count = 0
     for index in range(len(s[-1])):
         example = []
-        i = 0
         for l in s:
             example.append(l[index])
         correct_count += _predict_example(example, root)
@@ -62,8 +182,18 @@ def _predict(s, root):
 
 
 def _predict_example(example, node):
+    """
+    A recursive function that predicts the given example. Then returns whether it was correct or not
+
+    :param example: A single example from the data.
+    :param node: The current node to either split on or predict with.
+    :return: 0 - correct. 1 - incorrect
+    """
     if not node.is_leaf:
+        # print(node.attribute)
         a_index = attributes.index(node.attribute)
+        # print(a_index)
+        # print(example[a_index])
         child = node.branches[example[a_index]]
         return _predict_example(example, child)
     else:
@@ -71,7 +201,12 @@ def _predict_example(example, node):
         else: return 1
 
 
-def _check_tree(node, a, branches, level):
+def _check_tree(node, a=[], branches=[], level=1):
+    """
+    A recursive function that walks the tree and prints out the attributes, branches, it took to get to a label.
+
+    :param node: pass in the root node of the trained tree
+    """
     if node.is_leaf:
         astring = ""
         bstring = ""
@@ -190,8 +325,8 @@ def _calculate_entropy(s):
     for label in labels:
         num_of_s_l = _find_num_of_s_l(s, label)
         if num_of_s_l != 0:
-            p_l = num_of_s_l / len(s[-1])
-            entropy -= p_l * math.log(p_l, 2)
+            probability_of_label = num_of_s_l / len(s[-1])
+            entropy -= probability_of_label * math.log(probability_of_label, 2)
     return entropy
 
 
@@ -244,22 +379,28 @@ class Node:
 if __name__ == '__main__':
     data_type = sys.argv[1]
     purity_type = sys.argv[2]
+
     if len(sys.argv) > 3:
         depth = int(sys.argv[3])
-
     else:
         depth = -1
-
-    train_data = _import_data("./" + data_type + "/train.csv")
-    #train_data = _get_small_car_example_data()
-    test_data = _import_data("./" + data_type + "/test.csv")
 
     attributes = []
     if data_type == "car":
         attributes = car_attributes
         labels = car_labels
+    else:
+        attributes = bank_attributes
+        labels = bank_labels
+
+    train_data = _import_data(data_type, True)
+    #train_data = _get_small_car_example_data()
+    #train_data = _get_small_bank_example_data()
+    test_data = _import_data(data_type, False)
 
     tree = _train_data(train_data, purity=purity_type, max_depth=depth)
+
+    #print(train_data)
 
     #_check_tree(tree.root, [], [], 1)
     print(_predict(train_data, tree.root))
