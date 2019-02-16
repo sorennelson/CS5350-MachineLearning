@@ -1,152 +1,6 @@
 import sys
 import math
-import statistics
-
-car_attributes = [
-    ["vhigh", "high", "med", "low"],
-    ["vhigh", "high", "med", "low", "."],
-    ["2", "3", "4", "5more"],
-    ["2", "4", "more"],
-    ["small", "med", "big"],
-    ["low", "med", "high"]
-]
-
-car_labels = ["unacc", "acc", "good", "vgood"]
-
-bank_attributes = [
-    ["numeric", "eunder", "over"],
-    ["admin.", "unknown", "unemployed", "management", "housemaid", "entrepreneur", "student",
-        "blue-collar", "self-employed", "retired", "technician", "services"],
-    ["married", "divorced", "single"],
-    ["unknown", "secondary", "primary", "tertiary"],
-    ["yes", "no"],
-    ["numeric", "eunder", "over"],
-    ["yes", "no"],
-    ["yes", "no"],
-    ["unknown", "telephone", "cellular"],
-    ["numeric", "eunder", "over"],
-    ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"],
-    ["numeric", "eunder", "over"],
-    ["numeric", "eunder", "over"],
-    ["numeric", "eunder", "over"],
-    ["numeric", "eunder", "over"],
-    ["unknown", "other", "failure", "success"]
-]
-
-bank_labels = ["yes", "no"]
-
-
-def _import_data(path, train):
-    """
-    Imports the data from a csv file into a list of examples.
-
-    :param path: the data type to import. Either car or bank.
-    :return: the data as a list of lists that contain all the example values for an attribute or label (at s[-1]).
-    """
-    s = []
-    fp = "./" + path
-    if train:
-        fp = path + "/train.csv"
-    else:
-        fp = path + "/test.csv"
-    with open(fp, 'r') as f:
-        num_columns = 0
-        for line in f:
-            terms = line.strip().split(',')
-            num_columns = len(terms)
-            break
-
-        s = [[] for _ in range(num_columns)]
-
-        for line in f:
-            terms = line.strip().split(',')
-            for i in range(num_columns):
-                s[i].append(terms[i])
-    if path == "bank":
-        s = _change_numeric_attributes_to_binary(s)
-    return s
-
-
-def _change_numeric_attributes_to_binary(s):
-    for i in range(len(attributes)):
-
-        if attributes[i][0] == "numeric":
-            median = _get_median(s[i])
-            attributes[i][0] = str(median)
-            s[i] = _update_numeric_attributes(s[i], attributes[i])
-
-        elif _is_numeric_attribute(attributes[i]):
-            s[i] = _update_numeric_attributes(s[i], attributes[i])
-    return s
-
-
-def _is_numeric_attribute(attribute):
-    """
-    Check if a given attribute in the bank list is numeric
-    :param attribute:
-    :return: Boolean
-    """
-    try:
-        int(attribute[0])
-        return True
-    except ValueError:
-        return False
-
-
-
-def _get_median(s_a):
-    s_a_ints = list(map(int, s_a))  # convert from strings to ints
-    median = statistics.median(s_a_ints)
-    return median
-
-
-def _update_numeric_attributes(s_a, attribute):
-    for i in range(len(s_a)):
-        if int(s_a[i]) < int(attribute[0]): s_a[i] = "over"
-        else: s_a[i] = "eunder"
-    return s_a
-
-
-def _get_small_car_example_data():
-    """
-    Gets a list of 3 examples formatted like s.
-
-    :return: the examples
-    """
-    return [
-        ["low", "med", "high"],
-        ["high", "high", "high"],
-        ["5more", "5more", "5more"],
-        ["4", "4", "4"],
-        ["med", "med", "med"],
-        ["high", "high", "high"],
-        ["vgood", "good", "acc"]
-    ]
-
-
-def _get_small_bank_example_data():
-    s = [
-        ["48","48","53"],
-        ["services","blue-collar","technician"],
-        ["married", "married", "married"],
-        ["secondary", "secondary", "secondary"],
-        ["no", "no", "no"],
-        ["0", "0", "0"],
-        ["yes", "yes", "yes"],
-        ["no", "no", "no"],
-        ["unknown", "unknown", "unknown"],
-        ["5", "5", "5"],
-        ["may", "may", "may"],
-        ["114", "114", "114"],
-        ["2", "2", "2"],
-        ["-1", "-1", "-1"],
-        ["0", "0", "0"],
-        ["unknown", "unknown", "unknown"],
-        ["no", "no", "yes"],
-    ]
-    s = _change_numeric_attributes_to_binary(s)
-    return s
-
+import Import
 
 def _train_data(s, purity, max_depth=-1):
     """
@@ -190,10 +44,7 @@ def _predict_example(example, node):
     :return: 0 - correct. 1 - incorrect
     """
     if not node.is_leaf:
-        # print(node.attribute)
         a_index = attributes.index(node.attribute)
-        # print(a_index)
-        # print(example[a_index])
         child = node.branches[example[a_index]]
         return _predict_example(example, child)
     else:
@@ -201,7 +52,7 @@ def _predict_example(example, node):
         else: return 1
 
 
-def _check_tree(node, a=[], branches=[], level=1):
+def _check_tree(node, a=[], branches=[], level=0):
     """
     A recursive function that walks the tree and prints out the attributes, branches, it took to get to a label.
 
@@ -230,7 +81,7 @@ def _id3(s, parent, a, purity, level, max_depth):
         node.set_label(s[-1][0])
         return node
 
-    elif len(a) == 0 or level == max_depth:
+    elif len(a) == 0 or level == max_depth+1:
         node = Node(s, parent, True)
         node.set_label(_find_majority_label(s[-1]))
         return node
@@ -300,7 +151,6 @@ def _split(purity, node, a):
 def _calculate_gain(node, attribute, purity):
     gain = 0.0
     gain += _calculate_purity(node.s, purity)
-    #print(attribute)
     for value in attribute:
         s_v = _find_s_v(node, attribute, value)
 
@@ -357,7 +207,6 @@ class Tree:
 
 
 class Node:
-
     def __init__(self, s, parent, is_leaf):
         self.s = s
         self.parent = parent
@@ -387,22 +236,22 @@ if __name__ == '__main__':
 
     attributes = []
     if data_type == "car":
-        attributes = car_attributes
-        labels = car_labels
+        attributes = Import.car_attributes
+        labels = Import.car_labels
     else:
-        attributes = bank_attributes
-        labels = bank_labels
+        attributes = Import.bank_attributes
+        labels = Import.bank_labels
 
-    train_data = _import_data(data_type, True)
+    train_data = Import._import_data(data_type, True)
     #train_data = _get_small_car_example_data()
     #train_data = _get_small_bank_example_data()
-    test_data = _import_data(data_type, False)
+    test_data = Import._import_data(data_type, False)
 
     tree = _train_data(train_data, purity=purity_type, max_depth=depth)
 
     #print(train_data)
 
-    #_check_tree(tree.root, [], [], 1)
-    print(_predict(train_data, tree.root))
-    print(_predict(test_data, tree.root))
+    #_check_tree(tree.root, [], [], 0)
+    print("TRAIN:", _predict(train_data, tree.root))
+    print("TEST: ", _predict(test_data, tree.root))
 

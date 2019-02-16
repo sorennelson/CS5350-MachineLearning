@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fc9548f2-9370-43ee-bc79-8cfa19f047b8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/solosoren.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/solosoren.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Import.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ID3.py" beforeDir="false" afterPath="$PROJECT_DIR$/ID3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,24 +15,56 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ID3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="104" column="24" selection-start-line="104" selection-start-column="24" selection-end-line="104" selection-end-column="24" />
+            <state relative-caret-position="486">
+              <caret line="254" column="20" selection-start-line="254" selection-start-column="20" selection-end-line="254" selection-end-column="20" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <element signature="e#59#277#0" />
-                <element signature="e#312#567#1" />
-                <element signature="e#2380#2474#0" />
-                <element signature="e#1004#1244#0" />
-                <element signature="e#999#1089#1" />
-                <element signature="e#3317#3944#0" />
+                <element signature="e#3314#3858#0" />
                 <element signature="e#1379#1802#1" />
+                <element signature="e#1852#2091#0" />
                 <element signature="e#1957#2224#1" />
+                <element signature="e#5185#5775#0" />
                 <element signature="e#2512#2682#1" />
                 <element signature="e#3458#4143#0" />
                 <element signature="e#5927#5985#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="-303">
+                <caret line="1" column="68" selection-start-line="1" selection-start-column="68" selection-end-line="1" selection-end-column="68" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Import.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="615">
+              <caret line="53" column="23" lean-forward="true" selection-start-line="53" selection-start-column="23" selection-end-line="53" selection-end-column="23" />
+              <folding>
+                <element signature="e#17#209#0" />
+                <element signature="e#1092#1343#1" />
+                <element signature="e#2058#2414#0" />
+                <element signature="e#2053#2400#1" />
+                <element signature="e#2373#2585#0" />
+                <element signature="e#2454#2572#1" />
+                <element signature="e#3049#3170#0" />
+                <element signature="e#3044#3212#1" />
+                <element signature="e#2790#2922#0" />
+                <element signature="e#2964#3295#0" />
+                <element signature="e#2964#3050#1" />
+                <element signature="e#3338#3969#0" />
               </folding>
             </state>
           </provider>
@@ -68,12 +101,16 @@
         <option value="$PROJECT_DIR$/Car.py" />
         <option value="$PROJECT_DIR$/Model.py" />
         <option value="$PROJECT_DIR$/OldID3.py" />
+        <option value="$PROJECT_DIR$/Import.py" />
+        <option value="$PROJECT_DIR$/Script.txt" />
         <option value="$PROJECT_DIR$/ID3.py" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="width" value="1680" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="841" />
+    <option name="width" value="839" />
     <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -90,11 +127,6 @@
             <path>
               <item name="DecisionTree" type="b2602c69:ProjectViewProjectNode" />
               <item name="DecisionTree" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="DecisionTree" type="b2602c69:ProjectViewProjectNode" />
-              <item name="DecisionTree" type="462c0819:PsiDirectoryNode" />
-              <item name="car" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -185,17 +217,18 @@
       <workItem from="1549844749569" duration="34716000" />
       <workItem from="1549995286079" duration="5545000" />
       <workItem from="1550021451143" duration="12284000" />
-      <workItem from="1550095069444" duration="21284000" />
+      <workItem from="1550095069444" duration="36420000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="73829000" />
+    <option name="totallyTimeSpent" value="88965000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.10989011" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13919415" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -209,13 +242,13 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.2901879" />
+      <window_info anchor="bottom" id="Terminal" order="11" visible="true" weight="0.3559499" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32985386" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="4" side_tool="true" visible="true" weight="0.13736264" />
+      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="4" side_tool="true" visible="true" weight="0.05921856" />
       <window_info anchor="right" id="Database" order="5" />
     </layout>
     <layout-to-restore>
@@ -258,24 +291,59 @@
     <entry file="file://$PROJECT_DIR$/OldID3.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/Script.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="502">
+          <caret line="44" column="24" lean-forward="true" selection-start-line="44" selection-start-column="24" selection-end-line="44" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ID3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="104" column="24" selection-start-line="104" selection-start-column="24" selection-end-line="104" selection-end-column="24" />
+        <state relative-caret-position="486">
+          <caret line="254" column="20" selection-start-line="254" selection-start-column="20" selection-end-line="254" selection-end-column="20" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <element signature="e#59#277#0" />
-            <element signature="e#312#567#1" />
-            <element signature="e#2380#2474#0" />
-            <element signature="e#1004#1244#0" />
-            <element signature="e#999#1089#1" />
-            <element signature="e#3317#3944#0" />
+            <element signature="e#3314#3858#0" />
             <element signature="e#1379#1802#1" />
+            <element signature="e#1852#2091#0" />
             <element signature="e#1957#2224#1" />
+            <element signature="e#5185#5775#0" />
             <element signature="e#2512#2682#1" />
             <element signature="e#3458#4143#0" />
             <element signature="e#5927#5985#0" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Import.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="53" column="23" lean-forward="true" selection-start-line="53" selection-start-column="23" selection-end-line="53" selection-end-column="23" />
+          <folding>
+            <element signature="e#17#209#0" />
+            <element signature="e#1092#1343#1" />
+            <element signature="e#2058#2414#0" />
+            <element signature="e#2053#2400#1" />
+            <element signature="e#2373#2585#0" />
+            <element signature="e#2454#2572#1" />
+            <element signature="e#3049#3170#0" />
+            <element signature="e#3044#3212#1" />
+            <element signature="e#2790#2922#0" />
+            <element signature="e#2964#3295#0" />
+            <element signature="e#2964#3050#1" />
+            <element signature="e#3338#3969#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="-303">
+            <caret line="1" column="68" selection-start-line="1" selection-start-column="68" selection-end-line="1" selection-end-column="68" />
+          </first_editor>
+          <second_editor />
         </state>
       </provider>
     </entry>
