@@ -9,7 +9,7 @@ The dataset is from the [UCI repository](https://archive.ics.uci.edu/ml/datasets
 4. Persons - 2, 4, More than 4
 5. Lug Boot - Big, Medium, Small
 6. Safety - High, Medium, Small
-7. Label - Unacceptable, Acceptable, Good, Very Good
+- Label - Unacceptable, Acceptable, Good, Very Good
 ### How To Run
 ```
 python3 ID3.py car ig
@@ -18,7 +18,7 @@ To change the purity, replace ig with any of the following:
 - Information Gain: ig
 - Majority Error: me
 - Gini Index: gi
-If you would like to add a depth constraint to the tree, add the depth to the end of the line.
+If you would like to add a depth constraint to the tree, add the depth to the end of the line.  
 Ex: `python3 ID3.py car ig 2`
 
 ## Bank
@@ -40,7 +40,7 @@ The dataset is from [UCI repository](https://archive.ics.uci.edu/ml/datasets/Ban
 14. Pdays - (numeric) -1 means client was not previously contacted
 15. Previous - (numeric)
 16. Poutcome - unknown, other, failure, success
-17. yes, no
+- Label - yes, no
 ### How To Run
 ```
 python3 ID3.py bank ig
@@ -49,5 +49,5 @@ As above, to change the purity, replace ig with any of the following:
 - Information Gain: ig
 - Majority Error: me
 - Gini Index: gi
-If you would like to add a depth constraint to the tree, add the depth to the end of the line.
+If you would like to add a depth constraint to the tree, add the depth to the end of the line.  
 Ex: `python3 ID3.py bank ig 2`
