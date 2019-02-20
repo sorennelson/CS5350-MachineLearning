@@ -1,1 +1,1 @@
-This is a machine learning library developed by Soren Nelson for CS5350/6350 in University of Utah
+This is a Machine Learning library developed by Soren Nelson for CS5350/6350 at the University of Utah
