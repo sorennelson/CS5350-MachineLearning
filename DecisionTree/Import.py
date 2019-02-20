@@ -3,7 +3,7 @@ import statistics
 
 car_attributes = [
     ["vhigh", "high", "med", "low"],
-    ["vhigh", "high", "med", "low", "."],
+    ["vhigh", "high", "med", "low"],
     ["2", "3", "4", "5more"],
     ["2", "4", "more"],
     ["small", "med", "big"],
@@ -34,16 +34,11 @@ bank_attributes = [
 
 bank_labels = ["yes", "no"]
 
-majority_attributes = []
+# example_weights = []
 
 
-def _import_data(path, train):
-    """
-    Imports the data from a csv file into a list of examples.
-
-    :param path: the data type to import. Either car or bank.
-    :return: the data as a list of lists that contain all the example values for an attribute or label (at s[-1]).
-    """
+def import_data(path, train, treat_u_as_value):
+    """Imports the data from a csv file into a list of examples."""
     s = []
     fp = "./" + path
     if train:
@@ -66,8 +61,15 @@ def _import_data(path, train):
     if path == "bank":
         attributes = bank_attributes
         temp = _change_numeric_attributes_to_binary(s, attributes)
-        s = _change_missing_attributes_to_majority(temp, attributes, train)
+        if not treat_u_as_value:
+            s = _change_missing_attributes_to_majority(temp, attributes, train)
     return s
+
+
+# Example Weights
+def get_initial_example_weights(m):
+    """Returns the example weights to 1/m"""
+    return [1/m for _ in range(m)]
 
 
 # Numeric Attributes
@@ -75,10 +77,6 @@ def _change_numeric_attributes_to_binary(s, attributes):
     """
     Finds all numeric attributes, calculates the median, updates the attributes to contain the median.
     Then updates all examples to contain either "eunder", for equal to or under, or "over" for the numeric attributes.
-
-    :param s: the entire dataset
-    :param attributes: all attributes
-    :return: the updated dataset
     """
     for i in range(len(attributes)):
 
@@ -93,12 +91,7 @@ def _change_numeric_attributes_to_binary(s, attributes):
 
 
 def _is_numeric_attribute(attribute):
-    """
-    Check if a given attribute in the bank list is numeric
-
-    :param attribute:
-    :return: Boolean
-    """
+    """Check if a given attribute in the bank list is numeric."""
     try:
         int(attribute[0])
         return True
@@ -107,12 +100,7 @@ def _is_numeric_attribute(attribute):
 
 
 def _get_median(s_a):
-    """
-    Given example values at a numeric attribute, calculates the median of the set.
-
-    :param s_a: example values at a numeric attibute
-    :return: the median
-    """
+    """Given example values at a numeric attribute, calculates the median of the set."""
     s_a_ints = list(map(int, s_a))  # convert from strings to ints
     median = statistics.median(s_a_ints)
     return median
@@ -127,6 +115,7 @@ def _update_numeric_attributes(s_a, attribute):
 
 # Missing Attributes
 def _change_missing_attributes_to_majority(s, attributes, train):
+    majority_attributes = []
     for i in range(len(attributes)):
 
         if train:
@@ -148,13 +137,7 @@ def _change_missing_attributes_to_majority(s, attributes, train):
 
 
 def _find_majority_attribute_value(s_a, attribute):
-    """
-    Finds the majority attribute value for the given attribute.
-
-    :param s_a: The data for an attribute
-    :param attribute: The attribute to find the majority of
-    :return: The majority attribute value
-    """
+    """Finds the majority attribute value for the given attribute."""
     count = [0 for _ in range(len(attribute))]
 
     for value in s_a:
@@ -169,11 +152,7 @@ def _find_majority_attribute_value(s_a, attribute):
 
 
 def _get_small_car_example_data():
-    """
-    Gets a list of 3 examples formatted like s.
-
-    :return: the examples
-    """
+    """Gets a list of 3 examples formatted like s."""
     return [
         ["low", "med", "high"],
         ["high", "high", "high"],
@@ -186,6 +165,7 @@ def _get_small_car_example_data():
 
 
 def _get_small_bank_example_data():
+    """Gets a list of 3 examples formatted like s."""
     s = [
         ["48","48","53"],
         ["services","blue-collar","technician"],
