@@ -51,6 +51,7 @@ def _run_normal():
 
 def _run_ada_boost():
     """Runs 1000 iterations of the Decision Stump ID3 algorithm"""
+    global example_weights
     trees = []
     votes = []
 
@@ -62,14 +63,12 @@ def _run_ada_boost():
         vote = 0.5 * math.log((1-error)/error)
         z = 0
         for index in range(len(example_weights)):
-            global example_weights
-            # example_weights[index] =
-
-
+            z+1
 
 
 def _calculate_weights():
     """ """
+    z = 0
 
 
 def _train_data(s):
@@ -108,7 +107,7 @@ def _id3(s, parent, _attributes, level):
             else:
                 a = _attributes.copy()
                 a.remove(node.attribute)
-                child = _id3(s_v, node, a, level + 1, max_depth)
+                child = _id3(s_v, node, a, level + 1)
                 node.add_branch(value, child)
 
         return node
