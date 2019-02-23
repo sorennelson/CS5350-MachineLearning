@@ -1,19 +1,22 @@
 import sys
 import math
 import Import
+import numpy as np
 
 # Variables
 alg_type = "normal"
 data_type = "bank"
 purity_type = "ig"
 max_depth = -1
-attributes = []
-example_weights = []
+m = 5000
+T = 100
+example_weights = np.tile(np.repeat(1.0/m, m-1), (T+1, 1))
+predictions = np.empty((T+1, m-1))
 
 
 # Structures
 class Tree:
-    def __init__(self, purity="ig", max_depth=0):
+    def __init__(self, purity="ig"):
         self.purity = purity
         self.max_depth = max_depth
         self.root = None
@@ -23,8 +26,9 @@ class Tree:
 
 
 class Node:
-    def __init__(self, s, parent, is_leaf):
+    def __init__(self, s, _example_weights, parent, is_leaf):
         self.s = s
+        self.example_weights = _example_weights
         self.parent = parent
         self.is_leaf = is_leaf
         self.branches = {}
@@ -44,70 +48,91 @@ class Node:
 # Train
 def _run_normal():
     """Runs the normal ID3 algorithm"""
-    tree = _train_data(train_data)
+    # example_data = Import.get_small_bank_example_data()
+    tree = _train_data(train_data, 0)
+    #_check_tree(tree.root)
     print("TRAIN: ", _calculate_error(train_data, tree.root))
-    print("TEST: ", _calculate_error(test_data, tree.root))
+    #print("TEST: ", _calculate_error(test_data, tree.root))
 
 
 def _run_ada_boost():
     """Runs 1000 iterations of the Decision Stump ID3 algorithm"""
-    global example_weights
-    trees = []
-    votes = []
+    # TODO: 1st round is good. Run through gain on second and rest of ada
+    global example_weights, predictions
+    votes = np.empty(T+1)
+    y = np.array(train_data[-1])
+    z = np.zeros(T+1)
 
-    for t in range(1, 1001):
-        trees.append(_train_data(train_data))
-        error = _calculate_ada_error(train_data, trees[-1].root)
+    for t in range(0, T):
+        tree = _train_data(train_data, t)
+        _calculate_ada_predictions(train_data, t, tree.root)
+        error = 0.5 - (0.5 * (np.sum(example_weights[t] * y * predictions[t])))
 
-        # no base takes natural log
-        vote = 0.5 * math.log((1-error)/error)
-        z = 0
-        for index in range(len(example_weights)):
-            z+1
+        vote = _calculate_vote(error)
+        votes[t] = vote
+
+        example_weights[t+1] = example_weights[t] * np.exp(-vote * y * predictions[t])
+        z[t] = np.sum(example_weights[t+1])
+        example_weights[t+1] /= z[t]
+
+    tree = _train_data(train_data, T)
+    _calculate_ada_predictions(train_data, T, tree.root)
+    error = 0.5 - (0.5 * (np.sum(example_weights[T] * y * predictions[T])))
+
+    vote = _calculate_vote(error)
+    votes[t] = vote
+
+    temp = np.tile(np.empty(m-1), (T+1, 1))
+    for index in range(len(votes)):
+        temp[index] = np.array(votes[index] * predictions[index])
+    final_hyp = np.sign(temp.sum(axis=0))
+    print(final_hyp)
 
 
-def _calculate_weights():
-    """ """
-    z = 0
+def _calculate_vote(error):
+    # no base takes natural log
+    return 0.5 * math.log((1.0 - error) / error)
 
 
-def _train_data(s):
+def _train_data(s, t):
     """Trains a decision tree with the given data, the ID3 algorithm, and the type of purity function given."""
-    _tree = Tree(purity_type, max_depth)
-    _tree.set_root(_id3(s, None, attributes.copy(), 1))
+    _tree = Tree(purity_type)
+    _tree.set_root(_id3(s, example_weights[t].copy(), None, attributes.copy(), 1))
     return _tree
 
 
 # ID3
-def _id3(s, parent, _attributes, level):
+def _id3(s, _example_weights, parent, _attributes, level):
     """A recursive function that runs the ID3 algorithm. It uses the given purity to split on Attributes."""
     if s[-1].count(s[-1][0]) == len(s[-1]):
-        node = Node(s, parent, True)
+        node = Node(s, _example_weights, parent, True)
         node.set_label(s[-1][0])
         return node
 
     elif len(_attributes) == 0 or level == max_depth:
-        node = Node(s, parent, True)
-        node.set_label(_find_majority_label(s[-1]))
+        node = Node(s, _example_weights, parent, True)
+        node.set_label(_find_majority_label(s[-1], _example_weights))
         return node
 
     else:
-        node = Node(s, parent, False)
+        node = Node(s, _example_weights, parent, False)
         _split(node, _attributes)
 
         for value in node.attribute:
-            s_v = _find_s_v(node, node.attribute, value)
+            arr = _find_s_v(node, node.attribute, value)
+            s_v = arr[0]
+            _example_weights_v = np.array(arr[1])
 
             if len(s_v[-1]) == 0:
-                label = _find_majority_label(s[-1])
-                child = Node({}, node, True)
+                label = _find_majority_label(s[-1], _example_weights)
+                child = Node({}, np.array([]), node, True)
                 child.set_label(label)
                 node.add_branch(value, child)
 
             else:
                 a = _attributes.copy()
                 a.remove(node.attribute)
-                child = _id3(s_v, node, a, level + 1)
+                child = _id3(s_v, _example_weights_v, node, a, level + 1)
                 node.add_branch(value, child)
 
         return node
@@ -126,7 +151,11 @@ def _find_s_v(node, attribute, value):
             new_feature_list.append(node.s[i][index])
         s_v[i] = new_feature_list
 
-    return s_v
+    example_list = []
+    for index in indices:
+        example_list.append(node.example_weights[index])
+
+    return [s_v, np.array(example_list)]
 
 
 # Gain
@@ -143,13 +172,15 @@ def _split(node, _attributes):
 def _calculate_gain(node, attribute):
     """ """
     gain = 0.0
-    gain += _calculate_purity(node.s)
+    gain += _calculate_purity(node.s, node.example_weights)
     for value in attribute:
-        s_v = _find_s_v(node, attribute, value)
+        arr = _find_s_v(node, attribute, value)
+        s_v = arr[0]
+        _example_weights_v = np.array(arr[1])
 
         if len(s_v[-1]) != 0:
-            scalar = len(s_v[-1]) / len(node.s[-1])
-            p = _calculate_purity(s_v)
+            scalar = np.sum(_example_weights_v)
+            p = _calculate_purity(s_v, _example_weights_v)
 
             if p != 0:
                 gain -= scalar * p
@@ -157,63 +188,68 @@ def _calculate_gain(node, attribute):
     return gain
 
 
-def _calculate_purity(s):
+def _calculate_purity(s, _example_weights):
     """Runs the correct purity function based on the input."""
-    if   purity_type == "me": return _calculate_majority_error(s)
-    elif purity_type == "gi": return _calculate_gini_index(s)
-    else: return _calculate_entropy(s)
+    if   purity_type == "me": return _calculate_majority_error(s, _example_weights)
+    elif purity_type == "gi": return _calculate_gini_index(s, _example_weights)
+    else: return _calculate_entropy(s, _example_weights)
 
 
-def _calculate_entropy(s):
+def _calculate_entropy(s, _example_weights):
     """ """
     entropy = 0.0
     for label in labels:
-        num_of_s_l = _find_num_of_s_l(s, label)
+        num_of_s_l = _find_num_of_s_l(s, label, _example_weights)
         if num_of_s_l != 0:
-            probability_of_label = num_of_s_l / len(s[-1])
+            probability_of_label = num_of_s_l
             entropy -= probability_of_label * math.log(probability_of_label, 2)
     return entropy
 
 
-def _calculate_majority_error(s):
+def _calculate_majority_error(s, _example_weights):
     """
     Calculates the majority error for a given set of examples
     by finding the majority label and calculating the error from that label
     """
     majority_label = _find_majority_label(s[-1])
-    me = 1 - _find_num_of_s_l(s, majority_label) / len(s[-1])
+    me = 1 - _find_num_of_s_l(s, majority_label, _example_weights)
     return me
 
 
-def _find_majority_label(s_labels):
+def _find_majority_label(s_labels, _example_weights):
     """Finds the majority label given a list of label example data"""
     count = [0 for _ in range(len(labels))]
-    for label in s_labels:
-        for i in range(len(labels)):
-            if label == labels[i]:
-                count[i] += 1
+    for i in range(len(s_labels)):
+        label = s_labels[i]
+        for j in range(len(labels)):
+            if label == labels[j]:
+                count[j] += _example_weights[i]
                 break
 
     index = count.index(max(count))
     return labels[index]
 
 
-def _calculate_gini_index(s):
+def _calculate_gini_index(s, _example_weights):
     """Calculates the gini index for a given set of examples.
      by subtracting the number of examples for a label divided by the total number of examples all squared for every example.
      """
     gi = 1.0
     for label in labels:
-        num_of_s_l = _find_num_of_s_l(s, label)
+        num_of_s_l = _find_num_of_s_l(s, label, _example_weights)
         if num_of_s_l != 0:
-            p_l = num_of_s_l / len(s[-1])
+            p_l = num_of_s_l
             gi -= p_l**2
     return gi
 
 
-def _find_num_of_s_l(s, label):
+def _find_num_of_s_l(s, label, _example_weights):
     """Finds the number of examples for a particular label."""
-    return len([i for i, x in enumerate(s[-1]) if x == label])
+    total = 0.0
+    for i in range(len(s[-1])):
+        if s[-1][i] == label:
+            total += 1
+    return total / _example_weights.size
 
 
 # Prediction
@@ -227,49 +263,53 @@ def _calculate_error(s, root):
         example = []
         for l in s:
             example.append(l[index])
-        correct_count += _predict_example(example, root)
+        correct_count += _predict_example(example, root, False)
 
     return correct_count/len(s[-1])
 
 
-def _calculate_ada_error(s, root):
+def _calculate_ada_predictions(s, t, root):
     """ """
     error = 0
+    global predictions
     for index in range(len(s[-1])):
         example = []
         for l in s:
             example.append(l[index])
-        if _predict_example(example, root) == 0:
-            error += example_weights
+        prediction = _predict_example(example, root, True)
 
-    return error
+        predictions[t, index] = prediction
 
 
-def _predict_example(example, node):
+def _predict_example(example, node, is_ada):
     """A recursive function that predicts the given example. Then returns whether the prediction was correct or not."""
     if not node.is_leaf:
         a_index = attributes.index(node.attribute)
         child = node.branches[example[a_index]]
-        return _predict_example(example, child)
+        return _predict_example(example, child, is_ada)
     else:
-        if node.label == example[-1]: return 0
-        else: return 1
+        if not is_ada:
+            if node.label == example[-1]: return 0
+            else: return 1
+        else:
+            return node.label
 
 
 # Testing
 def _check_tree(node, _attributes=[], branches=[], level=0):
     """A recursive function that walks the tree and prints out the attributes, branches, it took to get to a label."""
     if node.is_leaf:
-        astring = ""
-        bstring = ""
-        for i in a:
-            astring += str(i) + ", "
+        _astring = ""
+        _bstring = ""
+        for _a in _attributes:
+            _astring += str(_a) + ", "
         for b in branches:
-            bstring += b + ", "
-        print("ATTRIBUTES: ", astring, "BRANCHES: ", bstring, "LABEL: ", node.label, "LEVEL: ", level)
+            _bstring += b + ", "
+        print("ATTRIBUTES: ", _astring, "BRANCHES: ", _bstring, "LABEL: ", node.label, "LEVEL: ", level)
 
     else:
         _attributes.append(node.attribute)
+        # print(node.branches.items())
         for branch, child in node.branches.items():
             copy = branches.copy()
             copy.append(branch)
@@ -278,12 +318,11 @@ def _check_tree(node, _attributes=[], branches=[], level=0):
 
 # Setup
 def _setup():
-    """Sets the global variables based on the sys arguments"""
-    global max_depth, alg_type, example_weights
+    """Sets the global variables based on the sys arguments."""
+    global max_depth, alg_type
     if sys.argv[1] == "ada":
         alg_type = "ada"
         max_depth = 2
-        example_weights = Import.get_initial_example_weights(5000)
 
     # Normal Decision Tree
     else:
@@ -292,17 +331,17 @@ def _setup():
         purity_type = sys.argv[2]
         if len(sys.argv) > 3:
             max_depth = int(sys.argv[3])
-        else:
-            max_depth = -1
     _set_attributes()
 
 
 def _set_attributes():
     """Sets the attributes and labels based on the data_type"""
-    global attributes, labels
+    global attributes, labels, m, example_weights
     if data_type == "car":
         attributes = Import.car_attributes
         labels = Import.car_labels
+        m = 1000
+        example_weights = np.tile(np.repeat(1.0 / m, m-1), (1000, 1))
 
     else:
         attributes = Import.bank_attributes
@@ -311,6 +350,12 @@ def _set_attributes():
 
 if __name__ == '__main__':
     _setup()
+    # attributes = Import.example_attributes
+    # labels = Import.bank_labels
+    # m = 14
+    # example_weights = np.tile(np.repeat(1.0 / m, m), (T+1, 1))
+    # predictions = np.empty((T+1, m))
+    # train_data = Import.get_example_data()
     train_data = Import.import_data(data_type, True, True)
     test_data = Import.import_data(data_type, False, True)
     if alg_type == "ada":

@@ -1,9 +1,9 @@
 import statistics
-
+import numpy as np
 
 car_attributes = [
     ["vhigh", "high", "med", "low"],
-    ["vhigh", "high", "med", "low"],
+    ["vhigh", "high", "med", "low", "."],
     ["2", "3", "4", "5more"],
     ["2", "4", "more"],
     ["small", "med", "big"],
@@ -14,28 +14,27 @@ car_labels = ["unacc", "acc", "good", "vgood"]
 
 bank_attributes = [
     ["numeric", "eunder", "over"],
-    ["admin.", "unknown", "unemployed", "management", "housemaid", "entrepreneur", "student",
+    ["job", "admin.", "unknown", "unemployed", "management", "housemaid", "entrepreneur", "student",
         "blue-collar", "self-employed", "retired", "technician", "services"],
-    ["married", "divorced", "single"],
-    ["unknown", "secondary", "primary", "tertiary"],
-    ["yes", "no"],
+    ["marital", "married", "divorced", "single"],
+    ["education", "unknown", "secondary", "primary", "tertiary"],
+    ["default", "yes", "no"],
     ["numeric", "eunder", "over"],
-    ["yes", "no"],
-    ["yes", "no"],
-    ["unknown", "telephone", "cellular"],
+    ["housing", "yes", "no"],
+    ["loan", "yes", "no"],
+    ["contact", "unknown", "telephone", "cellular"],
     ["numeric", "eunder", "over"],
-    ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"],
-    ["numeric", "eunder", "over"],
-    ["numeric", "eunder", "over"],
+    ["month", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"],
     ["numeric", "eunder", "over"],
     ["numeric", "eunder", "over"],
-    ["unknown", "other", "failure", "success"]
+    ["numeric", "eunder", "over"],
+    ["numeric", "eunder", "over"],
+    ["poutcome", "unknown", "other", "failure", "success"]
 ]
 
-bank_labels = ["yes", "no"]
+bank_labels = [-1, 1]
 
-# example_weights = []
-
+example_attributes = [["s", "o", "r"], ["h", "m", "c"], ["h", "n", "l"], ["s", "w"]]
 
 def import_data(path, train, treat_u_as_value):
     """Imports the data from a csv file into a list of examples."""
@@ -51,25 +50,23 @@ def import_data(path, train, treat_u_as_value):
             terms = line.strip().split(',')
             num_columns = len(terms)
             break
-
         s = [[] for _ in range(num_columns)]
 
         for line in f:
             terms = line.strip().split(',')
             for i in range(num_columns):
-                s[i].append(terms[i])
+
+                if path == "bank" and i == num_columns - 1:
+                    if terms[i] == "yes": s[i].append(1)
+                    else: s[i].append(-1)
+
+                else: s[i].append(terms[i])
     if path == "bank":
         attributes = bank_attributes
         temp = _change_numeric_attributes_to_binary(s, attributes)
         if not treat_u_as_value:
             s = _change_missing_attributes_to_majority(temp, attributes, train)
     return s
-
-
-# Example Weights
-def get_initial_example_weights(m):
-    """Returns the example weights to 1/m"""
-    return [1/m for _ in range(m)]
 
 
 # Numeric Attributes
@@ -79,7 +76,6 @@ def _change_numeric_attributes_to_binary(s, attributes):
     Then updates all examples to contain either "eunder", for equal to or under, or "over" for the numeric attributes.
     """
     for i in range(len(attributes)):
-
         if attributes[i][0] == "numeric":
             median = _get_median(s[i])
             attributes[i][0] = str(median)
@@ -151,7 +147,7 @@ def _find_majority_attribute_value(s_a, attribute):
     return attribute[index]
 
 
-def _get_small_car_example_data():
+def get_small_car_example_data():
     """Gets a list of 3 examples formatted like s."""
     return [
         ["low", "med", "high"],
@@ -164,7 +160,7 @@ def _get_small_car_example_data():
     ]
 
 
-def _get_small_bank_example_data():
+def get_small_bank_example_data():
     """Gets a list of 3 examples formatted like s."""
     s = [
         ["48","48","53"],
@@ -185,5 +181,30 @@ def _get_small_bank_example_data():
         ["unknown", "unknown", "unknown"],
         ["no", "no", "yes"],
     ]
-    s = _change_numeric_attributes_to_binary(s)
+    temp = []
+    for i in range(len(s[-1])):
+        if s[-1][i] == "yes":
+            s[-1][i] = 1
+        else:
+            s[-1][i] = 0
+    s = _change_numeric_attributes_to_binary(s, bank_attributes)
+    return s
+
+
+def get_example_data():
+    """Gets a list of 4 examples formatted like s."""
+    s = [
+        ["s", "s", "o", "r", "r", "r", "o", "s", "s", "r", "s", "o", "o", "r"],
+        ["h", "h", "h", "m", "c", "c", "c", "m", "c", "m", "m", "m", "h", "m"],
+        ["h", "h", "h", "h", "n", "n", "n", "h", "n", "n", "n", "h", "n", "h"],
+        ["w", "s", "w", "w", "w", "s", "s", "w", "w", "w", "s", "s", "w", "s"],
+        ["no", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no"],
+    ]
+    temp = []
+    for i in range(len(s[-1])):
+        if s[-1][i] == "yes":
+            s[-1][i] = 1
+        else:
+            s[-1][i] = -1
+
     return s
