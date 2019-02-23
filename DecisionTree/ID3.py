@@ -90,6 +90,7 @@ def _run_ada_boost():
 
 
 def _calculate_vote(error):
+    """Calculates the ada vote for the given error"""
     # no base takes natural log
     return 0.5 * math.log((1.0 - error) / error)
 
@@ -170,7 +171,11 @@ def _split(node, _attributes):
 
 
 def _calculate_gain(node, attribute):
-    """ """
+    """
+    Calculates the gain of the given attribute by using _calculate_purity().
+    Gain: Calculates purity of the entire attribute then subtracts the example weight for each attribute value * purity
+    of that attribute value.
+    """
     gain = 0.0
     gain += _calculate_purity(node.s, node.example_weights)
     for value in attribute:
@@ -196,12 +201,15 @@ def _calculate_purity(s, _example_weights):
 
 
 def _calculate_entropy(s, _example_weights):
-    """ """
+    """
+    Calculates the enropy by using _find_num_of_s_l() to find the probability of the label.
+    Uses probability * log(probability) for every label of the given attribute
+    """
     entropy = 0.0
     for label in labels:
-        num_of_s_l = _find_num_of_s_l(s, label, _example_weights)
-        if num_of_s_l != 0:
-            probability_of_label = num_of_s_l
+        probability_of_label = _find_num_of_s_l(s, label, _example_weights)
+
+        if probability_of_label != 0:
             entropy -= probability_of_label * math.log(probability_of_label, 2)
     return entropy
 
@@ -231,9 +239,10 @@ def _find_majority_label(s_labels, _example_weights):
 
 
 def _calculate_gini_index(s, _example_weights):
-    """Calculates the gini index for a given set of examples.
-     by subtracting the number of examples for a label divided by the total number of examples all squared for every example.
-     """
+    """
+    Calculates the gini index for a given set of examples by subtracting the number of examples for a label
+        divided by the total number of examples all squared for every example.
+    """
     gi = 1.0
     for label in labels:
         num_of_s_l = _find_num_of_s_l(s, label, _example_weights)
@@ -269,8 +278,10 @@ def _calculate_error(s, root):
 
 
 def _calculate_ada_predictions(s, t, root):
-    """ """
-    error = 0
+    """
+    Calculates the ada predictions for the given tree root by using all examples to walk tree
+        and using _predict_example()
+    """
     global predictions
     for index in range(len(s[-1])):
         example = []
@@ -282,7 +293,10 @@ def _calculate_ada_predictions(s, t, root):
 
 
 def _predict_example(example, node, is_ada):
-    """A recursive function that predicts the given example. Then returns whether the prediction was correct or not."""
+    """A recursive function that predicts the given example.
+        If not ada returns whether the prediction was correct or not.
+        If ada returns the prediction.
+    """
     if not node.is_leaf:
         a_index = attributes.index(node.attribute)
         child = node.branches[example[a_index]]
@@ -348,14 +362,19 @@ def _set_attributes():
         labels = Import.bank_labels
 
 
+def _setup_example_ada():
+    """Sets the global variable up to work with the example data from Import.py"""
+    global attributes, labels, m, example_weights, predictions, train_data
+    attributes = Import.example_attributes
+    labels = Import.bank_labels
+    m = 14
+    example_weights = np.tile(np.repeat(1.0 / m, m), (T+1, 1))
+    predictions = np.empty((T+1, m))
+    train_data = Import.get_example_data()
+
+
 if __name__ == '__main__':
     _setup()
-    # attributes = Import.example_attributes
-    # labels = Import.bank_labels
-    # m = 14
-    # example_weights = np.tile(np.repeat(1.0 / m, m), (T+1, 1))
-    # predictions = np.empty((T+1, m))
-    # train_data = Import.get_example_data()
     train_data = Import.import_data(data_type, True, True)
     test_data = Import.import_data(data_type, False, True)
     if alg_type == "ada":

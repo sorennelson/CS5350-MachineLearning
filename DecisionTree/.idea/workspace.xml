@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fc9548f2-9370-43ee-bc79-8cfa19f047b8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/CS5350-MachineLearning.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/CS5350-MachineLearning.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ID3.py" beforeDir="false" afterPath="$PROJECT_DIR$/ID3.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Import.py" beforeDir="false" afterPath="$PROJECT_DIR$/Import.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,14 +15,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ID3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-234">
-              <caret line="84" column="31" selection-start-line="84" selection-start-column="31" selection-end-line="84" selection-end-column="31" />
+            <state relative-caret-position="85">
+              <caret line="5" column="11" lean-forward="true" selection-start-line="4" selection-end-line="5" selection-end-column="11" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
                 <element signature="e#283#460#0" />
                 <element signature="e#479#956#0" />
                 <element signature="e#990#1272#0" />
+                <element signature="e#1478#2610#0" />
+                <element signature="e#2478#2554#0" />
                 <element signature="e#2200#2437#0" />
+                <element signature="e#2509#3725#0" />
                 <element signature="e#3771#4307#0" />
                 <element signature="e#4352#4618#0" />
                 <element signature="e#4663#5102#0" />
@@ -38,9 +36,12 @@
                 <element signature="e#6603#6995#0" />
                 <element signature="e#7052#7252#0" />
                 <element signature="e#7303#7691#0" />
+                <element signature="e#7742#8003#0" />
+                <element signature="e#8055#8505#0" />
                 <element signature="e#8583#9275#0" />
                 <element signature="e#9304#9705#0" />
                 <element signature="e#9735#10127#0" />
+                <element signature="e#10549#10792#0" />
               </folding>
             </state>
           </provider>
@@ -193,15 +194,16 @@
       <workItem from="1550538807420" duration="430000" />
       <workItem from="1550555534777" duration="263000" />
       <workItem from="1550793861628" duration="7183000" />
-      <workItem from="1550852976094" duration="8751000" />
+      <workItem from="1550852976094" duration="9747000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="105592000" />
+    <option name="totallyTimeSpent" value="106588000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.01831502" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -227,7 +229,7 @@
       <window_info anchor="right" id="Database" order="6" />
     </layout>
     <layout-to-restore>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.06166056" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.01831502" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -241,14 +243,14 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.16597077" />
-      <window_info anchor="bottom" id="Python Console" order="12" weight="0.32985386" />
+      <window_info anchor="bottom" id="Python Console" order="11" weight="0.32985386" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="4" side_tool="true" visible="true" weight="0.18192919" />
-      <window_info anchor="right" id="Database" order="5" />
+      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="4" sideWeight="0.50104386" side_tool="true" weight="0.01831502" />
+      <window_info active="true" anchor="right" id="Terminal" order="5" sideWeight="0.49895614" visible="true" weight="0.36202687" />
+      <window_info anchor="right" id="Database" order="6" />
     </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -278,14 +280,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ID3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-234">
-          <caret line="84" column="31" selection-start-line="84" selection-start-column="31" selection-end-line="84" selection-end-column="31" />
+        <state relative-caret-position="85">
+          <caret line="5" column="11" lean-forward="true" selection-start-line="4" selection-end-line="5" selection-end-column="11" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
             <element signature="e#283#460#0" />
             <element signature="e#479#956#0" />
             <element signature="e#990#1272#0" />
+            <element signature="e#1478#2610#0" />
+            <element signature="e#2478#2554#0" />
             <element signature="e#2200#2437#0" />
+            <element signature="e#2509#3725#0" />
             <element signature="e#3771#4307#0" />
             <element signature="e#4352#4618#0" />
             <element signature="e#4663#5102#0" />
@@ -296,9 +301,12 @@
             <element signature="e#6603#6995#0" />
             <element signature="e#7052#7252#0" />
             <element signature="e#7303#7691#0" />
+            <element signature="e#7742#8003#0" />
+            <element signature="e#8055#8505#0" />
             <element signature="e#8583#9275#0" />
             <element signature="e#9304#9705#0" />
             <element signature="e#9735#10127#0" />
+            <element signature="e#10549#10792#0" />
           </folding>
         </state>
       </provider>
