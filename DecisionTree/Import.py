@@ -36,6 +36,7 @@ bank_labels = [-1, 1]
 
 example_attributes = [["s", "o", "r"], ["h", "m", "c"], ["h", "n", "l"], ["s", "w"]]
 
+
 def import_data(path, train, treat_u_as_value):
     """Imports the data from a csv file into a list of examples."""
     s = []

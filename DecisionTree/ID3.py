@@ -2,6 +2,7 @@ import sys
 import math
 import Import
 import numpy as np
+import random
 
 # Variables
 alg_type = "normal"
@@ -9,9 +10,7 @@ data_type = "bank"
 purity_type = "ig"
 max_depth = -1
 m = 5000
-T = 100
-example_weights = np.tile(np.repeat(1.0/m, m-1), (T+1, 1))
-predictions = np.empty((T+1, m-1))
+T = 1000
 
 
 # Structures
@@ -45,64 +44,135 @@ class Node:
         self.branches[value] = node
 
 
-# Train
+# Normal Decision Tree
 def _run_normal():
     """Runs the normal ID3 algorithm"""
-    # example_data = Import.get_small_bank_example_data()
     tree = _train_data(train_data, 0)
-    #_check_tree(tree.root)
-    print("TRAIN: ", _calculate_error(train_data, tree.root))
-    #print("TEST: ", _calculate_error(test_data, tree.root))
+    print("TRAIN: ", _calculate_prediction_error_for_tree(train_data, tree.root))
+    #print("TEST: ", _calculate_prediction_error_for_tree(test_data, tree.root))
 
 
+# ADA
 def _run_ada_boost():
     """Runs 1000 iterations of the Decision Stump ID3 algorithm"""
-    # TODO: 1st round is good. Run through gain on second and rest of ada
-    global example_weights, predictions
-    votes = np.empty(T+1)
-    y = np.array(train_data[-1])
-    z = np.zeros(T+1)
+    y_train = np.array(train_data[-1])
+    y_test = np.array(test_data[-1])
+    global predictions, example_weights
 
-    for t in range(0, T):
-        tree = _train_data(train_data, t)
-        _calculate_ada_predictions(train_data, t, tree.root)
-        error = 0.5 - (0.5 * (np.sum(example_weights[t] * y * predictions[t])))
+    for t in range(T):
+        example_weights = np.tile(np.repeat(1.0 / m, m - 1), (T + 1, 1))
+        predictions = np.empty((T + 1, m - 1))
+        test_predictions = np.empty((T + 1, m - 1))
 
-        vote = _calculate_vote(error)
-        votes[t] = vote
+        arr = _train_t_iters_ada_boost(t, y_train)
+        print(t+1, ": TRAIN: ", _calculate_prediction_error(y_train, arr[0]))
 
-        example_weights[t+1] = example_weights[t] * np.exp(-vote * y * predictions[t])
-        z[t] = np.sum(example_weights[t+1])
-        example_weights[t+1] /= z[t]
+        test_final_hyp = _test_ada_boost(arr[1], arr[2], test_predictions)
+        print(t+1, ": TEST: ", _calculate_prediction_error(y_test, test_final_hyp))
 
-    tree = _train_data(train_data, T)
-    _calculate_ada_predictions(train_data, T, tree.root)
-    error = 0.5 - (0.5 * (np.sum(example_weights[T] * y * predictions[T])))
 
-    vote = _calculate_vote(error)
-    votes[t] = vote
+def _train_t_iters_ada_boost(_T, y):
+    votes = np.empty(_T+1)
+    trees = []
+    s = train_data.copy()
 
-    temp = np.tile(np.empty(m-1), (T+1, 1))
-    for index in range(len(votes)):
-        temp[index] = np.array(votes[index] * predictions[index])
-    final_hyp = np.sign(temp.sum(axis=0))
-    print(final_hyp)
+    for t in range(_T):
+        tree = _train_data(s, t)
+        trees.append(tree)
+        predictions[t] = _calculate_predictions(s, tree.root, predictions[t])
+        error = _calculate_error(y, t)
+        votes[t] = _calculate_vote(error)
+        if t != _T:  _calculate_weights(votes, y, t)
+
+    final_hyp = _calculate_ada_final_hyp(votes, predictions)
+    # for value in final_hyp:
+    #     print(value)
+    return [final_hyp, trees, votes]
+
+
+def _test_ada_boost(trees, votes, _predictions):
+    s = test_data.copy()
+    for t in range(len(trees)):
+        _predictions[t] = _calculate_predictions(s, trees[t].root, _predictions[t])
+    return _calculate_ada_final_hyp(votes, _predictions)
+
+
+def _calculate_error(y, t):
+    # Calculates the error for predictions[t] with example_weights[t]
+    return 0.5 - (0.5 * (np.sum(example_weights[t] * y * predictions[t])))
 
 
 def _calculate_vote(error):
-    """Calculates the ada vote for the given error"""
+    """Calculates the vote for the given error"""
     # no base takes natural log
     return 0.5 * math.log((1.0 - error) / error)
 
 
+def _calculate_weights(votes, y, t):
+    """Calculates the weights for the adaboost algorithm"""
+    example_weights[t+1] = example_weights[t] * np.exp(-votes[t] * y * predictions[t])
+    z = np.sum(example_weights[t+1])
+    example_weights[t+1] /= z
+
+
+def _calculate_ada_final_hyp(votes, _predictions):
+    """Sums up the predictions times the given votes"""
+    temp = np.tile(np.empty(m - 1), (T + 1, 1))
+    for index in range(len(votes)):
+        temp[index] = np.array(votes[index] * _predictions[index])
+    return np.sign(temp.sum(axis=0))
+
+
+# Bagged Trees
+def _run_bagged():
+    """Runs the bagged decision tree algorithm for 1000 different samples"""
+    global predictions
+    y = np.tile(np.empty((m-1)), (T+1, 1))
+
+    for t in range(T+1):
+        s = _draw_sample()
+        y[t] = np.array(s[-1], dtype=int)
+        tree = _train_data(s, t)
+        predictions[t] = _calculate_predictions(s, tree.root, predictions[t])
+
+    final_hyp = _calculate_bagged_final_hyp()
+
+
+def _test_t_bag_trees(_T, s):
+
+
+def _calculate_bagged_final_hyp():
+    # for each example, find the majority prediction
+    final_hyp = []
+    temp = []
+    # m-1?
+    for i in range(len(m)):
+        for t in range(T + 1):
+            temp.append(predictions[t][i])
+        final_hyp.append(_find_majority_label(temp, np.repeat(1.0 / m, T + 1)))
+    return final_hyp
+
+
+def _draw_sample():
+    """Draws m samples uniformly with replacement for Bagging"""
+    s = []
+    for i in range(len(train_data)):
+        s.append([])
+    for i in range(m-1):
+        n = random.randint(0, m-2)
+        for j in range(len(train_data)):
+            s[j].append(train_data[j][n])
+    return s
+
+
+# ID3
 def _train_data(s, t):
-    """Trains a decision tree with the given data, the ID3 algorithm, and the type of purity function given."""
+    """Trains a decision tree using the ID3 algorithm with the type of purity function given on the given data."""
     _tree = Tree(purity_type)
     _tree.set_root(_id3(s, example_weights[t].copy(), None, attributes.copy(), 1))
     return _tree
 
 
-# ID3
 def _id3(s, _example_weights, parent, _attributes, level):
     """A recursive function that runs the ID3 algorithm. It uses the given purity to split on Attributes."""
     if s[-1].count(s[-1][0]) == len(s[-1]):
@@ -166,7 +236,6 @@ def _split(node, _attributes):
     for i in range(len(_attributes)):
         gains.append(_calculate_gain(node, _attributes[i]))
     max_index = gains.index(max(gains))
-
     node.set_attribute(_attributes[max_index])
 
 
@@ -186,7 +255,6 @@ def _calculate_gain(node, attribute):
         if len(s_v[-1]) != 0:
             scalar = np.sum(_example_weights_v)
             p = _calculate_purity(s_v, _example_weights_v)
-
             if p != 0:
                 gain -= scalar * p
 
@@ -202,7 +270,7 @@ def _calculate_purity(s, _example_weights):
 
 def _calculate_entropy(s, _example_weights):
     """
-    Calculates the enropy by using _find_num_of_s_l() to find the probability of the label.
+    Calculates the entropy by using _find_num_of_s_l() to find the probability of the label.
     Uses probability * log(probability) for every label of the given attribute
     """
     entropy = 0.0
@@ -224,11 +292,11 @@ def _calculate_majority_error(s, _example_weights):
     return me
 
 
-def _find_majority_label(s_labels, _example_weights):
+def _find_majority_label(y, _example_weights):
     """Finds the majority label given a list of label example data"""
     count = [0 for _ in range(len(labels))]
-    for i in range(len(s_labels)):
-        label = s_labels[i]
+    for i in range(len(y)):
+        label = y[i]
         for j in range(len(labels)):
             if label == labels[j]:
                 count[j] += _example_weights[i]
@@ -257,12 +325,12 @@ def _find_num_of_s_l(s, label, _example_weights):
     total = 0.0
     for i in range(len(s[-1])):
         if s[-1][i] == label:
-            total += 1
-    return total / _example_weights.size
+            total += _example_weights[i]
+    return total / np.sum(_example_weights)
 
 
 # Prediction
-def _calculate_error(s, root):
+def _calculate_prediction_error_for_tree(s, root):
     """
     Finds the prediction error based on the given data and the given tree (root).
     Calculated by: 1 - correct count / number of examples
@@ -277,23 +345,32 @@ def _calculate_error(s, root):
     return correct_count/len(s[-1])
 
 
-def _calculate_ada_predictions(s, t, root):
+def _calculate_prediction_error(y, _predictions):
+    count = 0
+    for i in range(len(y)):
+        if y[i] != _predictions[i]: count += 1
+    return count / len(y)
+
+
+def _calculate_predictions(s, root, _predictions):
     """
     Calculates the ada predictions for the given tree root by using all examples to walk tree
         and using _predict_example()
     """
-    global predictions
+    p = _predictions.copy()
     for index in range(len(s[-1])):
         example = []
         for l in s:
             example.append(l[index])
         prediction = _predict_example(example, root, True)
 
-        predictions[t, index] = prediction
+        p[index] = prediction
+    return p
 
 
 def _predict_example(example, node, is_ada):
-    """A recursive function that predicts the given example.
+    """
+    A recursive function that predicts the given example.
         If not ada returns whether the prediction was correct or not.
         If ada returns the prediction.
     """
@@ -338,6 +415,9 @@ def _setup():
         alg_type = "ada"
         max_depth = 2
 
+    elif sys.argv[1] == "bag":
+        alg_type = "bag"
+
     # Normal Decision Tree
     else:
         global data_type, purity_type
@@ -350,26 +430,32 @@ def _setup():
 
 def _set_attributes():
     """Sets the attributes and labels based on the data_type"""
-    global attributes, labels, m, example_weights
+    global attributes, labels, m, example_weights, predictions
     if data_type == "car":
         attributes = Import.car_attributes
         labels = Import.car_labels
         m = 1000
-        example_weights = np.tile(np.repeat(1.0 / m, m-1), (1000, 1))
+        example_weights = np.tile(np.repeat(1.0 / m, m-1), (T+1, 1))
 
     else:
         attributes = Import.bank_attributes
         labels = Import.bank_labels
+        if alg_type == "bag":
+            m = 2500
+            example_weights = np.tile(np.repeat(1.0 / m, m - 1), (T+1, 1))
+            predictions = np.empty((T + 1, m - 1))
 
 
 def _setup_example_ada():
     """Sets the global variable up to work with the example data from Import.py"""
-    global attributes, labels, m, example_weights, predictions, train_data
+    global attributes, labels, m, example_weights, predictions, train_data, max_depth, alg_type
     attributes = Import.example_attributes
     labels = Import.bank_labels
-    m = 14
-    example_weights = np.tile(np.repeat(1.0 / m, m), (T+1, 1))
-    predictions = np.empty((T+1, m))
+    max_depth = 2
+    m = 15
+    example_weights = np.tile(np.repeat(1.0/(m-1), m-1), (T+1, 1))
+    predictions = np.empty((T+1, m-1))
+    alg_type = "ada"
     train_data = Import.get_example_data()
 
 
@@ -377,8 +463,8 @@ if __name__ == '__main__':
     _setup()
     train_data = Import.import_data(data_type, True, True)
     test_data = Import.import_data(data_type, False, True)
-    if alg_type == "ada":
-        _run_ada_boost()
-    else:
-        _run_normal()
+
+    if alg_type == "ada": _run_ada_boost()
+    elif alg_type == "bag": _run_bagged()
+    else: _run_normal()
 
