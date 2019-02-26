@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fc9548f2-9370-43ee-bc79-8cfa19f047b8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/ID3.py" beforeDir="false" afterPath="$PROJECT_DIR$/ID3.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Import.py" beforeDir="false" afterPath="$PROJECT_DIR$/Import.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11,35 +10,49 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/DecisionTree$ID3.coverage" NAME="ID3 Coverage Results" MODIFIED="1551142989880" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ID3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="639">
-              <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
+            <state relative-caret-position="402">
+              <caret line="169" column="66" lean-forward="true" selection-start-line="169" selection-start-column="66" selection-end-line="169" selection-end-column="66" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
                 <element signature="e#284#461#0" />
-                <element signature="e#480#957#0" />
+                <element signature="e#425#903#0" />
+                <element signature="e#546#745#0" />
+                <element signature="e#991#1273#0" />
+                <element signature="e#2023#2400#0" />
                 <element signature="e#2327#2498#0" />
                 <element signature="e#1866#1936#0" />
                 <element signature="e#1965#2091#0" />
-                <element signature="e#1870#2079#0" />
-                <element signature="e#2427#2681#0" />
+                <element signature="e#3478#3687#0" />
+                <element signature="e#6694#7286#0" />
+                <element signature="e#6631#7607#0" />
+                <element signature="e#7467#7682#0" />
+                <element signature="e#7996#8149#0" />
+                <element signature="e#8092#8196#0" />
                 <element signature="e#3493#3733#0" />
-                <element signature="e#2942#4158#0" />
+                <element signature="e#7848#9064#0" />
                 <element signature="e#5093#5629#0" />
                 <element signature="e#4785#5051#0" />
                 <element signature="e#5096#5765#0" />
                 <element signature="e#5816#6095#0" />
                 <element signature="e#6147#6586#0" />
                 <element signature="e#6645#6924#0" />
+                <element signature="e#6985#7361#0" />
                 <element signature="e#7416#7814#0" />
                 <element signature="e#8962#9207#0" />
                 <element signature="e#8122#8510#0" />
+                <element signature="e#9888#10402#0" />
                 <element signature="e#9581#10273#0" />
-                <element signature="e#12278#12726#0" />
+                <element signature="e#16785#17289#0" />
+                <element signature="e#13124#13703#0" />
+                <element signature="e#17867#18358#0" />
               </folding>
             </state>
           </provider>
@@ -48,7 +61,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Import.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="671">
+            <state relative-caret-position="2737">
               <caret line="201" column="8" lean-forward="true" selection-start-line="201" selection-start-column="8" selection-end-line="201" selection-end-column="102" />
             </state>
           </provider>
@@ -80,9 +93,15 @@
       <find>train_data</find>
       <find>attr</find>
       <find>z</find>
-      <find>_find_majority_label</find>
       <find>_find_num_of_s_l</find>
       <find>predictions</find>
+      <find>example_weights</find>
+      <find>_find_majority_label</find>
+      <find>_id3</find>
+      <find>rand</find>
+      <find>T+1</find>
+      <find>T + 1</find>
+      <find>t+1</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -102,10 +121,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1920" />
-    <option name="y" value="-444" />
-    <option name="width" value="1920" />
-    <option name="height" value="1080" />
+    <option name="width" value="1680" />
+    <option name="height" value="1050" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -207,23 +224,23 @@
       <workItem from="1550555534777" duration="263000" />
       <workItem from="1550793861628" duration="7183000" />
       <workItem from="1550852976094" duration="9747000" />
-      <workItem from="1550943451188" duration="32373000" />
+      <workItem from="1550943451188" duration="63250000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="138961000" />
+    <option name="totallyTimeSpent" value="169838000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1920" y="-444" width="1920" height="1080" extended-state="6" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.01831502" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4984985" weight="0.01831502" />
+      <window_info id="Structure" order="1" sideWeight="0.5015015" side_tool="true" weight="0.01831502" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32985386" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.29958245" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -233,13 +250,13 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.32985386" />
+      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.808977" visible="true" weight="0.08768267" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="4" sideWeight="0.19129555" side_tool="true" visible="true" weight="0.24653888" />
-      <window_info active="true" anchor="right" id="Terminal" order="5" sideWeight="0.80870444" visible="true" weight="0.24653888" />
-      <window_info anchor="right" id="Database" order="6" />
+      <window_info active="true" anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="4" sideWeight="0.19102296" side_tool="true" visible="true" weight="0.18070818" />
+      <window_info anchor="right" id="Database" order="5" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" weight="0.01831502" />
@@ -286,37 +303,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Import.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="671">
+        <state relative-caret-position="2737">
           <caret line="201" column="8" lean-forward="true" selection-start-line="201" selection-start-column="8" selection-end-line="201" selection-end-column="102" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ID3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="639">
-          <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
+        <state relative-caret-position="402">
+          <caret line="169" column="66" lean-forward="true" selection-start-line="169" selection-start-column="66" selection-end-line="169" selection-end-column="66" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
             <element signature="e#284#461#0" />
-            <element signature="e#480#957#0" />
+            <element signature="e#425#903#0" />
+            <element signature="e#546#745#0" />
+            <element signature="e#991#1273#0" />
+            <element signature="e#2023#2400#0" />
             <element signature="e#2327#2498#0" />
             <element signature="e#1866#1936#0" />
             <element signature="e#1965#2091#0" />
-            <element signature="e#1870#2079#0" />
-            <element signature="e#2427#2681#0" />
+            <element signature="e#3478#3687#0" />
+            <element signature="e#6694#7286#0" />
+            <element signature="e#6631#7607#0" />
+            <element signature="e#7467#7682#0" />
+            <element signature="e#7996#8149#0" />
+            <element signature="e#8092#8196#0" />
             <element signature="e#3493#3733#0" />
-            <element signature="e#2942#4158#0" />
+            <element signature="e#7848#9064#0" />
             <element signature="e#5093#5629#0" />
             <element signature="e#4785#5051#0" />
             <element signature="e#5096#5765#0" />
             <element signature="e#5816#6095#0" />
             <element signature="e#6147#6586#0" />
             <element signature="e#6645#6924#0" />
+            <element signature="e#6985#7361#0" />
             <element signature="e#7416#7814#0" />
             <element signature="e#8962#9207#0" />
             <element signature="e#8122#8510#0" />
+            <element signature="e#9888#10402#0" />
             <element signature="e#9581#10273#0" />
-            <element signature="e#12278#12726#0" />
+            <element signature="e#16785#17289#0" />
+            <element signature="e#13124#13703#0" />
+            <element signature="e#17867#18358#0" />
           </folding>
         </state>
       </provider>
