@@ -15,7 +15,7 @@ attr_subset_num = 0
 
 # Adaboost
 def _run_ada_boost():
-    """Runs T iterations of the Decision Stump ID3 algorithm"""
+    """Runs T iterations of the ID3 algorithm on Decision Stumps"""
     global predictions
     test_predictions = np.zeros((T, m))
     y_train = np.array(ID3.train_data[-1])
@@ -49,7 +49,7 @@ def _run_ada_boost():
 
 def _train_iter_ada_boost(t, y):
     """
-    Runs one iteration of ada_boost on the train data.
+    Runs one iteration of adaboost on the train data.
     Trains a decision stump, then calculates the predictions, error and vote, then finds the final hypothesis.
     """
     global vote_arr
