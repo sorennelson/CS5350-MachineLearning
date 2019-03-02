@@ -13,14 +13,13 @@ Trains 1000 decision stump trees using the ID3 algorithm. Learns a vote and calc
 2. Use the decision stump to calculate predictions for all examples
 3. Calculate the error by summing up the weights[t] where the prediction != label
 4. Use the error to calculate the vote for the predictions: 
-<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/EnsembleLearning/Images/Vote.png" height="60">  
+<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/EnsembleLearning/Images/Vote.png" height="50">  
 
 5. Calculate the example weights for the next iteration: 
 <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/EnsembleLearning/Images/Weights.png" height="75">  
 
 6. Calculate the final predictions up until this point using the calculated predictions and votes (this allows us to see whether our algorithm is decreasing the error as it should): 
-<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/EnsembleLearning/Images/Final_Predictions.png" height="60">
-    
+<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/EnsembleLearning/Images/Final_Predictions.png" height="40">
 ##### Testing
 1. Using the above tree, calculate the test predictions
 2. Calculate the final test predictions up until this point by using the same function as above
