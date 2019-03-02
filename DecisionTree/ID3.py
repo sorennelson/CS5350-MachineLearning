@@ -49,7 +49,12 @@ def _run():
     print("TEST: ", calculate_prediction_error_for_tree(test_data, tree.root))
 
 
+# Attributes
 def _get_attributes(_attributes):
+    """
+    Gets a subset of attributes for the next attribute split if there is a set subset size.
+    Otherwise just returns the unused attributes
+    """
     if attr_subset_num != 0:
         return _get_subset_of_attributes(_attributes)
     else:
@@ -57,25 +62,24 @@ def _get_attributes(_attributes):
 
 
 def _get_subset_of_attributes(_attributes):
+    """Gets a random subset of attributes that haven't been split on"""
     subset = []
-    while len(subset) < attr_subset_num:
+    while len(subset) < attr_subset_num and len(subset) < len(_attributes):
         n = random.randint(0, len(attributes) - 1)
         if attributes[n] in _attributes:
             subset.append(attributes[n])
     return subset
 
 
-# def _get_count_of_used_attributes(subset, _attributes):
-#     count = 0
-#     for attr in subset:
-#         if attr not in _attributes:
-#             count += 1
-#     return count
-
-
 # ID3
 def train(s, t, _attr_subset_num=0):
-    """Trains a decision tree using the ID3 algorithm with the type of purity function given on the given data."""
+    """
+    Trains a decision tree using the ID3 algorithm using the type of purity function given.
+    :param s: [](examples, features) - the entire dataset
+    :param t: the index of example_weights to use. ie the training iteration.
+    :param _attr_subset_num: If running Random Forest, set the attribute subset size.
+    :return: The trained tree
+    """
     global attr_subset_num
     attr_subset_num = _attr_subset_num
 
@@ -198,7 +202,7 @@ def _calculate_majority_error(s, _example_weights):
     Calculates the majority error for a given set of examples
     by finding the majority label and calculating the error from that label
     """
-    majority_label = _find_majority_label(s[-1])
+    majority_label = _find_majority_label(s[-1], _example_weights)
     me = 1 - _find_num_of_s_l(s, majority_label, _example_weights)
     return me
 
@@ -245,22 +249,28 @@ def calculate_prediction_error_for_tree(s, root):
     """
     Finds the prediction error based on the given data and the given tree (root).
     Calculated by: 1 - correct count / number of examples
+    :param s: the entire dataset - [s, y]
+    :param root: the root of the learned tree
+    :return: percentage of incorrect predictions
     """
-    correct_count = 0
+    incorrect_count = 0
     for index in range(len(s[-1])):
         example = []
         for l in s:
             example.append(l[index])
-        correct_count += predict_example(example, root, True)
+        incorrect_count += predict_example(example, root, True)
 
-    return correct_count/len(s[-1])
+    return incorrect_count/len(s[-1])
 
 
 def predict_example(example, node, is_normal):
     """
     A recursive function that predicts the given example.
-    If not ada returns whether the prediction was correct or not.
-    If ada returns the prediction.
+    :param example: [features] - The feature values for a single example
+    :param node: The root node
+    :param is_normal: True if running normal ID3 algorithm. False if boosting/bagging
+    :return: If is_normal returns 0 if the prediction was correct, 1 otherwise.
+            If not is_normal returns the prediction.
     """
     if not node.is_leaf:
         a_index = attributes.index(node.attribute)
@@ -289,7 +299,6 @@ def _check_tree(node, _attributes=[], branches=[], level=0):
 
     else:
         _attributes.append(node.attribute)
-        # print(node.branches.items())
         for branch, child in node.branches.items():
             copy = branches.copy()
             copy.append(branch)
@@ -298,7 +307,11 @@ def _check_tree(node, _attributes=[], branches=[], level=0):
 
 # Setup
 def setup_data(m=4999, iters=1):
-    """Sets the attributes and labels based on the data_type"""
+    """
+    Sets attributes, labels, example_weights train_data, and test_data based on the data_type
+    :param m: number of examples ID3 will run on
+    :param iters: number of iterations ID3 will be run
+    """
     global attributes, labels, example_weights, train_data, test_data
     if data_type == "car":
         attributes = Import.car_attributes
@@ -320,20 +333,8 @@ def setup_example_ada(T):
     labels = Import.bank_labels
     m = 14
     example_weights = np.tile(np.repeat(1.0/m, m), (T, 1))
-    #predictions = np.empty((T+1, m-1))
     train_data = Import.get_example_data()
     test_data = Import.get_example_data()
-
-
-# def _setup_example_bag():
-#     global attributes, labels, example_weights, train_data, test_data, alg_type
-#     attributes = Import.example_attributes
-#     labels = Import.bank_labels
-#     m = 7
-#     alg_type = "bag"
-#     train_data = Import.get_example_data()
-#     test_data = Import.get_example_data()
-#     example_weights = np.tile(np.repeat(1.0 / m, m), (T, 1))
 
 
 if __name__ == '__main__':

@@ -13,7 +13,7 @@ attr_subset_nums = [2, 4, 6]
 attr_subset_num = 0
 
 
-# ADA
+# Adaboost
 def _run_ada_boost():
     """Runs T iterations of the Decision Stump ID3 algorithm"""
     global predictions
@@ -48,18 +48,19 @@ def _run_ada_boost():
 
 
 def _train_iter_ada_boost(t, y):
+    """
+    Runs one iteration of ada_boost on the train data.
+    Trains a decision stump, then calculates the predictions, error and vote, then finds the final hypothesis.
+    """
     global vote_arr
     s = ID3.train_data
     tree = ID3.train(s, t)
     trees.append(tree)
 
     predictions[t] = _calculate_predictions(s, tree.root, predictions[t])
-    # print("P: ", predictions[t])
     error = _calculate_error(y, t)
-    # print("E: ", error)
 
     vote_arr.append(_calculate_vote(error))
-    # print("V: ", vote_arr)
     votes = np.array(vote_arr)
     if t != T-1:  _calculate_weights(votes, y, t)
 
@@ -68,6 +69,7 @@ def _train_iter_ada_boost(t, y):
 
 
 def _test_iter_ada_boost(votes, _predictions):
+    """Calculates the final hypothesis of the test data when run on the trained trees."""
     s = ID3.test_data
     for t in range(len(trees)):
         _predictions[t] = _calculate_predictions(s, trees[t].root, _predictions[t])
@@ -75,7 +77,7 @@ def _test_iter_ada_boost(votes, _predictions):
 
 
 def _calculate_error(y, t):
-    # Calculates the error for predictions[t] with example_weights[t]
+    """Calculates the error for predictions[t] with example_weights[t]"""
     return 0.5 - (0.5 * (np.sum(ID3.example_weights[t] * y * predictions[t])))
 
 
@@ -186,7 +188,7 @@ def _bias_variance_decomp():
 
 # Random Forest
 def _run_rand_forest():
-    """ """
+    """Runs T iterations of random forest for each attribute subset size in [2, 4, 6]"""
     global attr_subset_num
     for attr_subset_num in attr_subset_nums:
         print("FEATURE_SUBSET_SIZE: ", attr_subset_num, ": _______________________")
@@ -218,6 +220,7 @@ def _calculate_bagged_predictions(s, indices, root, _predictions):
 
 
 def _calculate_prediction_error(y, _predictions):
+    """Calculates the percentage of incorrect predictions"""
     count = 0
     for i in range(len(y)):
         if y[i] != _predictions[i]: count += 1
