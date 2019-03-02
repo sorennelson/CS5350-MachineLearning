@@ -2673,3 +2673,4 @@ venv/lib/python3.7/site-packages/numpy-1.16.2.dist-info/entry_points.txt
 venv/bin/f2py3.7
 venv/bin/f2py3
 venv/bin/f2py
+*.pyc
