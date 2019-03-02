@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="154694b5-20f0-48a6-b13b-19d1c3158cde" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/CS5350-MachineLearning.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CS5350-MachineLearning.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LinearRegression/LinearRegression.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DecisionTree/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DecisionTree/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DecisionTree/ID3.py" beforeDir="false" afterPath="$PROJECT_DIR$/DecisionTree/ID3.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DecisionTree/Import.py" beforeDir="false" afterPath="$PROJECT_DIR$/DecisionTree/Import.py" afterDir="false" />
     </list>
@@ -15,36 +15,64 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DecisionTree/ID3.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="370">
+              <caret line="338" selection-start-line="338" selection-end-line="345" selection-end-column="10" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#167#344#0" />
+                <element signature="e#363#840#0" />
+                <element signature="e#882#1109#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DecisionTree/Import.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2370">
-              <caret line="183" column="13" selection-start-line="183" selection-start-column="13" selection-end-line="183" selection-end-column="13" />
+            <state relative-caret-position="540">
+              <caret line="43" column="53" selection-start-line="43" selection-start-column="34" selection-end-line="43" selection-end-column="53" />
               <folding>
                 <element signature="e#0#17#0" expanded="true" />
                 <element signature="e#55#247#0" />
-                <element signature="e#315#1156#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/DecisionTree/ID3.py">
+        <entry file="file://$PROJECT_DIR$/LinearRegression/LinearRegression.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
+            <state relative-caret-position="240">
+              <caret line="16" column="31" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <element signature="e#278#455#0" />
-                <element signature="e#474#951#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/EnsembleLearning/Ensemble.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="7" column="8" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -52,10 +80,18 @@
       <find>a</find>
       <find>majority_attributes</find>
       <find>purity</find>
-      <find>purity</find>
       <find>_find_num_of_s_l</find>
       <find>find_num</find>
       <find>print</find>
+      <find>alg_type</find>
+      <find>m</find>
+      <find>m,</find>
+      <find>train_data(</find>
+      <find>train_data</find>
+      <find>train_</find>
+      <find>global</find>
+      <find>_id3</find>
+      <find>zeros</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -64,13 +100,15 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/DecisionTree/Import.py" />
         <option value="$PROJECT_DIR$/DecisionTree/ID3.py" />
+        <option value="$PROJECT_DIR$/DecisionTree/Import.py" />
+        <option value="$PROJECT_DIR$/EnsembleLearning/Ensemble.py" />
+        <option value="$PROJECT_DIR$/LinearRegression/LinearRegression.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="719" />
+    <option name="width" value="1680" />
     <option name="height" value="1050" />
   </component>
   <component name="ProjectView">
@@ -78,7 +116,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -91,10 +128,21 @@
               <item name="CS5350-MachineLearning" type="462c0819:PsiDirectoryNode" />
               <item name="DecisionTree" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="CS5350-MachineLearning" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CS5350-MachineLearning" type="462c0819:PsiDirectoryNode" />
+              <item name="EnsembleLearning" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CS5350-MachineLearning" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CS5350-MachineLearning" type="462c0819:PsiDirectoryNode" />
+              <item name="LinearRegression" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -151,22 +199,27 @@
       <option name="presentableId" value="Default" />
       <updated>1550674707077</updated>
       <workItem from="1550674710385" duration="36373000" />
+      <workItem from="1551234418775" duration="4694000" />
+      <workItem from="1551241028160" duration="1575000" />
+      <workItem from="1551391527325" duration="26892000" />
+      <workItem from="1551495875621" duration="4891000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36373000" />
+    <option name="totallyTimeSpent" value="74425000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4989224" visible="true" weight="0.11782662" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4989224" visible="true" weight="0.12271062" />
       <window_info id="Structure" order="2" sideWeight="0.5010776" side_tool="true" weight="0.07570208" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="1" visible="true" weight="0.34309623" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="1" visible="true" weight="0.38830897" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="3" />
+      <window_info anchor="bottom" id="Version Control" order="3" weight="0.32985386" />
       <window_info anchor="bottom" id="Python Console" order="4" weight="0.32943678" />
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
@@ -185,13 +238,13 @@
     </layout>
     <layout-to-restore>
       <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4989224" weight="0.11843712" />
+      <window_info content_ui="combo" id="Project" order="1" sideWeight="0.4989224" visible="true" weight="0.12026862" />
       <window_info id="Structure" order="2" sideWeight="0.5010776" side_tool="true" weight="0.07570208" />
       <window_info anchor="bottom" id="Database Changes" order="0" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="1" visible="true" weight="0.23698193" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="1" visible="true" weight="0.21607515" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="3" />
-      <window_info anchor="bottom" id="Python Console" order="4" weight="0.32985386" />
+      <window_info anchor="bottom" id="Python Console" order="4" weight="0.32943678" />
       <window_info anchor="bottom" id="Docker" order="5" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="6" />
       <window_info anchor="bottom" id="Find" order="7" />
@@ -202,7 +255,7 @@
       <window_info anchor="bottom" id="TODO" order="12" />
       <window_info anchor="right" id="SciView" order="0" weight="0.32967034" />
       <window_info anchor="right" id="Database" order="1" />
-      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="2" side_tool="true" visible="true" weight="0.12576687" />
+      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="2" side_tool="true" visible="true" weight="0.12881564" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="3" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="4" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="5" weight="0.25" />
@@ -217,24 +270,41 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DecisionTree/Import.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2370">
-          <caret line="183" column="13" selection-start-line="183" selection-start-column="13" selection-end-line="183" selection-end-column="13" />
+        <state relative-caret-position="540">
+          <caret line="43" column="53" selection-start-line="43" selection-start-column="34" selection-end-line="43" selection-end-column="53" />
           <folding>
             <element signature="e#0#17#0" expanded="true" />
             <element signature="e#55#247#0" />
-            <element signature="e#315#1156#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/DecisionTree/ID3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
+        <state relative-caret-position="370">
+          <caret line="338" selection-start-line="338" selection-end-line="345" selection-end-column="10" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <element signature="e#278#455#0" />
-            <element signature="e#474#951#0" />
+            <element signature="e#167#344#0" />
+            <element signature="e#363#840#0" />
+            <element signature="e#882#1109#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/EnsembleLearning/Ensemble.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="7" column="8" selection-start-line="7" selection-start-column="8" selection-end-line="7" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LinearRegression/LinearRegression.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="16" column="31" selection-start-line="16" selection-start-column="31" selection-end-line="16" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -40,11 +40,10 @@ example_attributes = [["s", "o", "r"], ["h", "m", "c"], ["h", "n", "l"], ["s", "
 def import_data(path, train, treat_u_as_value):
     """Imports the data from a csv file into a list of examples."""
     s = []
-    fp = "./" + path
     if train:
-        fp = path + "/train.csv"
+        fp = "../DecisionTree/" + path + "/train.csv"
     else:
-        fp = path + "/test.csv"
+        fp = "../DecisionTree/" + path + "/test.csv"
     with open(fp, 'r') as f:
         num_columns = 0
         for line in f:

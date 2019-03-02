@@ -18,23 +18,27 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ID3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="402">
-              <caret line="169" column="66" lean-forward="true" selection-start-line="169" selection-start-column="66" selection-end-line="169" selection-end-column="66" />
+            <state relative-caret-position="2445">
+              <caret line="591" column="4" selection-start-line="591" selection-start-column="4" selection-end-line="593" selection-end-column="58" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
                 <element signature="e#284#461#0" />
                 <element signature="e#425#903#0" />
                 <element signature="e#546#745#0" />
                 <element signature="e#991#1273#0" />
+                <element signature="e#1252#2844#0" />
                 <element signature="e#2023#2400#0" />
                 <element signature="e#2327#2498#0" />
-                <element signature="e#1866#1936#0" />
                 <element signature="e#1965#2091#0" />
                 <element signature="e#3478#3687#0" />
+                <element signature="e#2427#2681#0" />
+                <element signature="e#4672#5567#0" />
+                <element signature="e#4680#5458#0" />
+                <element signature="e#5599#5990#0" />
+                <element signature="e#5699#6008#0" />
                 <element signature="e#6694#7286#0" />
-                <element signature="e#6631#7607#0" />
+                <element signature="e#6913#7240#0" />
                 <element signature="e#7467#7682#0" />
-                <element signature="e#7996#8149#0" />
                 <element signature="e#8092#8196#0" />
                 <element signature="e#3493#3733#0" />
                 <element signature="e#7848#9064#0" />
@@ -48,11 +52,14 @@
                 <element signature="e#7416#7814#0" />
                 <element signature="e#8962#9207#0" />
                 <element signature="e#8122#8510#0" />
+                <element signature="e#10103#10212#0" />
+                <element signature="e#13184#13539#0" />
                 <element signature="e#9888#10402#0" />
                 <element signature="e#9581#10273#0" />
                 <element signature="e#16785#17289#0" />
                 <element signature="e#13124#13703#0" />
                 <element signature="e#17867#18358#0" />
+                <element signature="e#18595#18981#0" />
               </folding>
             </state>
           </provider>
@@ -63,6 +70,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="2737">
               <caret line="201" column="8" lean-forward="true" selection-start-line="201" selection-start-column="8" selection-end-line="201" selection-end-column="102" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../EnsembleLearning/Ensemble.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="6" selection-start-column="6" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -102,6 +118,8 @@
       <find>T+1</find>
       <find>T + 1</find>
       <find>t+1</find>
+      <find>int</find>
+      <find>empty</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -117,6 +135,7 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/Import.py" />
         <option value="$PROJECT_DIR$/ID3.py" />
+        <option value="$PROJECT_DIR$/../EnsembleLearning/Ensemble.py" />
       </list>
     </option>
   </component>
@@ -133,7 +152,17 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="DecisionTree" type="b2602c69:ProjectViewProjectNode" />
+              <item name="DecisionTree" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -224,18 +253,17 @@
       <workItem from="1550555534777" duration="263000" />
       <workItem from="1550793861628" duration="7183000" />
       <workItem from="1550852976094" duration="9747000" />
-      <workItem from="1550943451188" duration="63250000" />
+      <workItem from="1550943451188" duration="73023000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="169838000" />
+    <option name="totallyTimeSpent" value="179611000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4984985" weight="0.01831502" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4984985" visible="true" weight="0.12698413" />
       <window_info id="Structure" order="1" sideWeight="0.5015015" side_tool="true" weight="0.01831502" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -250,12 +278,12 @@
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="11" weight="0.32985386" />
-      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.808977" visible="true" weight="0.08768267" />
+      <window_info anchor="bottom" id="Terminal" order="12" sideWeight="0.808977" visible="true" weight="0.1691023" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info active="true" anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="4" sideWeight="0.19102296" side_tool="true" visible="true" weight="0.18070818" />
+      <window_info anchor="right" x="0" y="0" width="370" height="850" id="Documentation" order="4" sideWeight="0.19102296" side_tool="true" visible="true" weight="0.18070818" />
       <window_info anchor="right" id="Database" order="5" />
     </layout>
     <layout-to-restore>
@@ -308,25 +336,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../EnsembleLearning/Ensemble.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="6" selection-start-column="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ID3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="402">
-          <caret line="169" column="66" lean-forward="true" selection-start-line="169" selection-start-column="66" selection-end-line="169" selection-end-column="66" />
+        <state relative-caret-position="2445">
+          <caret line="591" column="4" selection-start-line="591" selection-start-column="4" selection-end-line="593" selection-end-column="58" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
             <element signature="e#284#461#0" />
             <element signature="e#425#903#0" />
             <element signature="e#546#745#0" />
             <element signature="e#991#1273#0" />
+            <element signature="e#1252#2844#0" />
             <element signature="e#2023#2400#0" />
             <element signature="e#2327#2498#0" />
-            <element signature="e#1866#1936#0" />
             <element signature="e#1965#2091#0" />
             <element signature="e#3478#3687#0" />
+            <element signature="e#2427#2681#0" />
+            <element signature="e#4672#5567#0" />
+            <element signature="e#4680#5458#0" />
+            <element signature="e#5599#5990#0" />
+            <element signature="e#5699#6008#0" />
             <element signature="e#6694#7286#0" />
-            <element signature="e#6631#7607#0" />
+            <element signature="e#6913#7240#0" />
             <element signature="e#7467#7682#0" />
-            <element signature="e#7996#8149#0" />
             <element signature="e#8092#8196#0" />
             <element signature="e#3493#3733#0" />
             <element signature="e#7848#9064#0" />
@@ -340,11 +379,14 @@
             <element signature="e#7416#7814#0" />
             <element signature="e#8962#9207#0" />
             <element signature="e#8122#8510#0" />
+            <element signature="e#10103#10212#0" />
+            <element signature="e#13184#13539#0" />
             <element signature="e#9888#10402#0" />
             <element signature="e#9581#10273#0" />
             <element signature="e#16785#17289#0" />
             <element signature="e#13124#13703#0" />
             <element signature="e#17867#18358#0" />
+            <element signature="e#18595#18981#0" />
           </folding>
         </state>
       </provider>
