@@ -126,28 +126,12 @@ def _run_bagged():
 
 def _run_bagged_iter(_t, is_train, data, _predictions):
     """Runs one iteration of the bagged decision tree algorithm"""
-    [s, indices] = _draw_sample(data)
+    s = _draw_sample(data)
     if is_train: trees.append(ID3.train(s, _t, attr_subset_num))
-    _predictions = _calculate_bagged_predictions(s, indices, trees[_t].root, _predictions)
+    _predictions = _calculate_bagged_predictions(data, trees[_t].root, _predictions)
     hyp = _calculate_bagged_final_hyp(_predictions)
 
     return [_calculate_prediction_error(np.array(data[-1], dtype=int), hyp), _predictions]
-
-
-def _calculate_bagged_final_hyp( _predictions):
-    """Updates predictions that are 0 (due to lack of being sampled or even amount of sampling) to -1 or 1"""
-    is_even = True
-    final_hyp = np.sign(_predictions)
-    for i in range(_predictions.size):
-        p = _predictions[i]
-
-        if p == 0:
-            if is_even: p = 1
-            else: p = -1
-            is_even = not is_even
-
-        final_hyp[i] = p
-    return np.sign(final_hyp)
 
 
 def _draw_sample(data):
@@ -161,7 +145,23 @@ def _draw_sample(data):
         indices.append(n)
         for j in range(len(data)):
             s[j].append(data[j][n])
-    return [s, indices]
+    return s
+
+
+def _calculate_bagged_final_hyp( _predictions):
+    """Updates predictions that are 0 to -1 or 1"""
+    is_even = True
+    final_hyp = np.sign(_predictions)
+    for i in range(_predictions.size):
+        p = _predictions[i]
+
+        if p == 0:
+            if is_even: p = 1
+            else: p = -1
+            is_even = not is_even
+
+        final_hyp[i] = p
+    return np.sign(final_hyp)
 
 
 # Bias/variance
@@ -189,8 +189,9 @@ def _bias_variance_decomp():
 # Random Forest
 def _run_rand_forest():
     """Runs T iterations of random forest for each attribute subset size in [2, 4, 6]"""
-    global attr_subset_num
+    global attr_subset_num, trees
     for attr_subset_num in attr_subset_nums:
+        trees = []
         print("FEATURE_SUBSET_SIZE: ", attr_subset_num, ": _______________________")
         _run_bagged()
 
@@ -210,12 +211,12 @@ def _calculate_predictions(s, root, _predictions):
     return p
 
 
-def _calculate_bagged_predictions(s, indices, root, _predictions):
+def _calculate_bagged_predictions(data, root, _predictions):
     """Uses the initial indexes of the sample data to calculate the overall prediction of all examples in s"""
-    round_predictions = np.zeros(len(indices))
-    round_predictions = _calculate_predictions(s, root, round_predictions)
-    for i in range(len(indices)):
-        _predictions[indices[i]] = predictions[indices[i]] + round_predictions[i]
+    round_predictions = np.zeros(len(data[-1]))
+    round_predictions = _calculate_predictions(data, root, round_predictions)
+    for i in range(len(data[-1])):
+        _predictions[i] += round_predictions[i]
     return _predictions
 
 

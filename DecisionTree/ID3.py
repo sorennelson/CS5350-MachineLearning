@@ -148,8 +148,8 @@ def _find_s_v(node, attribute, value):
 def _split(node, _attributes):
     """Finds the Attribute to split on. Sets the node's attribute."""
     gains = []
-    for i in range(len(_attributes)):
-        gains.append(_calculate_gain(node, _attributes[i]))
+    for attribute in _attributes:
+        gains.append(_calculate_gain(node, attribute))
     max_index = gains.index(max(gains))
     node.set_attribute(_attributes[max_index])
 
