@@ -9,7 +9,7 @@ python3 Ensemble.py ada
 ### Algorithm
 Trains 1000 decision stump trees using the ID3 algorithm. Learns a vote and calculates predictions for each example using each tree. Then averages the voted predictions to find a final prediction for each example. The training set prediction error can then be calculated using the final predictions. To calculate the test set prediction error (see how well the learned hypothesis generalizes) it uses the above trees and votes. The trees are used to calculate the test set predictions. Uses these to average the voted predictions to find the final test predictions. The test set prediction error is then just the number of incorrect predictions / number of examples.
 
-### Algorithm In Detail````
+### Algorithm In Detail
 1. Create a weight matrix weights to store the weight of each example for each iteration
 2. Initialize weights[0] to be 1/m for all m examples (equal weight for each example)
 3. for t=1...1000:
@@ -56,11 +56,11 @@ python3 Ensemble.py forest
 For each attribute subset size in {2, 4, 6}, using the Bagged Decision Tree algorithm, it trains T different random samples (with replacement) of 2500 training examples using the ID3 algorithm. The attribute subset size is used to randomly sample a set of attributes (of the specified size) to use at each split of the decision tree in the ID3 algorithm. Just as in the Bagged Decision tree, the sampling of the attributes is used to create an even more more robust hypothesis by reducing the correlation between predictions of trees.
 ### Results
 Using the bank dataset described below with of 2500 examples randomly sampled (with replacement) over 1000 iterations.
-Attribute subset size: 2 - training set error: %, test set error: %
-Attribute subset size: 4 - training set error: %, test set error: %
-Attribute subset size: 6 - training set error: %, test set error: %
+Attribute subset size: 2 - training set error: 5.8%, test set error: 11.62%
+Attribute subset size: 4 - training set error: 5.34%, test set error: 11.44%
+Attribute subset size: 6 - training set error: 5.2%, test set error: 11.22%
 ##### Curve of prediction errors at each iteration
-<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/EnsembleLearning/Images/Bagged_Error.png" width="400">  
+<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/EnsembleLearning/Images/Random_Forest_Error.png" width="400">  
 
 ## Data
 The dataset is from [UCI repository](https://archive.ics.uci.edu/ml/datasets/Bank+Marketing). This dataset contains 16 bank attributes for a given customer, including both numerical and categorical ones. The numerical attributes were altered to be equal to or under the median value, or above the median. Unknown attributes were considered an attribute value. The label is whether the client subscribed to a term deposit. There are 5000 training examples and 5000 test examples.
