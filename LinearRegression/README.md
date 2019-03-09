@@ -3,7 +3,7 @@ This is the Least Mean Squares algorithm. It is optimized by Stochastic Gradient
 
 ## Least Mean Squares
 ### Cost Function
-<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/LinearRegression/Images/Cost.png" height="40">  
+<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/LinearRegression/Images/Cost.png" height="75">  
 
 ## Batch Gradient Descent
 Uses the gradient of the Least Mean Squares loss function to minimize the cost. The algorithm is said to converge when ||new weight vector - prev weight vector|| is less than 0.000001. The learning rate starts at 1 and is halved every 10000 iterations.
