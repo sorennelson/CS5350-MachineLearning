@@ -45,6 +45,7 @@ def _run_ada_boost():
     print(train_err_str)
     print("DEC STUMP TEST: ")
     print(test_err_str)
+    
 
 
 def _train_iter_ada_boost(t, y):
