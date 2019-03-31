@@ -44,7 +44,7 @@ python3 LinearRegression.py sgd
 5. Shuffle the data
 6. **For example in training data**:
     1. Compute the gradient of the cost function with respect to the weight vector **for a single example**:
-        <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/LinearRegression/Images/Gradient.png" height="40">  
+        <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/LinearRegression/Images/Gradient.png" height="75">  
     2. Update weights[iter + 1, feature] = weights[iter, feature] - (learning rate * gradient)
 7. Compute the LMS cost of the train data to ensure the algorithm is decreasing.
 8. If ||new weight vector - prev weight vector|| < 0.0001, the algorithm has converged. The final weight vector and the learning rate are the last ones to be updated.
