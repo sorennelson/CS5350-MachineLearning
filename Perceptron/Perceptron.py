@@ -20,7 +20,7 @@ def _run_standard_algorithm(learning_rate=1.0):
         test_predictions = np.sign(weights * np.transpose(test_data))
         test_error = _calculate_error(test_predictions, test_y)
 
-        print(epoch, "- Train Error:", train_error, " Test Error:", test_error)
+        print(epoch + 1, "- Train Error:", train_error, " Test Error:", test_error)
 
     print("Final Weights: ", weights)
 
