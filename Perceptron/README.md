@@ -9,6 +9,7 @@ The perceptron is mistake driven, thus we only update when our algorithm incorec
 <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Update.png" height="75">  
 
 ## Classification
+The below algorithm works because our labels are {-1, 1}.
 <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Classification.png" height="75">  
 
 ## Standard Algorithm
