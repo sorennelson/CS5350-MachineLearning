@@ -7,7 +7,6 @@ from scipy.optimize import minimize
 def run_dual(kernel, g=False):
     cs = [100/873, 500/873, 700/873]
     gammas = [0.01, 0.1, 0.5, 1, 2, 5, 10, 100]
-    # gammas = [2]
     guess = np.random.rand(872)
     con = [{'type': 'eq', 'fun': constraint}]
 
@@ -38,7 +37,8 @@ def dual_objective(alpha, args):
     k = kernel(x, x, g)
 
     yky = y.T * k * y
-    left_summation = alpha.T.dot(np.dot(yky[0, 0], alpha))
+    left_summation = alpha.T.dot(yky[0, 0] * alpha)
+    # left_summation = alpha.T.dot(np.dot(yky[0, 0], alpha))
     return 1/2 * left_summation - np.sum(alpha)
 
 
@@ -60,7 +60,7 @@ def compute_and_print_errors(solution, c, g, kernel):
     print("WEIGHTS:", weights)
     print("BIAS:", np.average(bias))
     print("TRAIN ERROR:", train_error)
-    # print("TEST ERROR:", test_error)
+    print("TEST ERROR:", test_error)
     print("G:", g)
     print("C:", c)
     print("_________")
@@ -81,8 +81,9 @@ def compute_dual_train_and_test_errors(alpha, kernel, g):
     bias = compute_dual_bias(alpha, train_y, train_data, kernel, g)
 
     train_error = compute_dual_error(alpha, train_y, train_data, bias, kernel, g)
-    # test_error = compute_dual_error(alpha, test_y, test_data, bias, kernel)
-    return [weights, bias, train_error, 0]
+    # test_error = compute_dual_error(alpha, test_y, test_data, bias, kernel, g)
+    test_error = 0
+    return [weights, bias, train_error, test_error]
 
 
 def compute_dual_weights(alpha):
@@ -96,6 +97,8 @@ def compute_dual_bias(alpha, y, x, kernel, g):
 def compute_dual_error(alpha, y, x, b, kernel, g):
     # Computes the predictions for the given weights/data. Then calculates the error for the predictions.
     predictions = compute_dual_predictions(alpha, x, y, b, kernel, g).T
+    print(alpha)
+    print(predictions)
     return compute_error(y, predictions)
 
 
@@ -139,7 +142,7 @@ def compute_primal_train_and_test_errors(c, gamma, d):
 def compute_primal_hyper_parameters(schedule):
     # Computes the best hyper parameters for c = 700 / 873
     gammas = [0.01, 0.005, 0.0025, 0.00125, 0.000625]
-    ds = [1, 0.5, 0.1, 0.05, 0.01, 0.005, 0.001]
+    ds = [1, 0.1, 0.05, 0.01, 0.001]
     smallest = [0, 100.0, 100.0]
     c = 700 / 873
 
@@ -178,10 +181,12 @@ def run_sgd(c, g_not, d, n=872):
     loss = []
 
     for epoch in range(0, 100):
+        # Set learning rate
         gamma = update_gamma(epoch, g_not, d)
         [temp_train_y, temp_train_set] = _shuffle_data(train_y, train_data)
 
         for i in range(0, n):
+            # Augment with bias parameter
             x = np.append(temp_train_set[i], [[1]], axis=1)
 
             if is_incorrectly_classified(temp_train_y[i], weights, x):
@@ -189,10 +194,10 @@ def run_sgd(c, g_not, d, n=872):
             else:
                 weights[0][:weights.size-1] = update_correct_example(weights, gamma)
 
+            # To make sure converging
             l = compute_loss(c, temp_train_y, weights, temp_train_set, n)
             loss.append(l[0, 0])
-            # print("LOSS: ", l[0, 0])
-            # If convergent, then return w
+    print("LOSS: ", loss)
     return [weights, loss]
 
 
@@ -237,7 +242,7 @@ def compute_loss(c, y, w, x, n=872):
 def compute_error(y, predictions):
     return 1 - np.count_nonzero(np.multiply(y.T, predictions) == 1) / len(y)
 
-
+# Import
 def import_data(path, num_examples):
     """Imports the data at the given path to a csv file with the given amount of examples."""
     data = np.empty((num_examples, 4), dtype="float")
@@ -258,6 +263,7 @@ def import_data(path, num_examples):
     return [np.asmatrix(data), np.asmatrix(y)]
 
 
+# Example
 def run_primal_example():
     run_sgd(1 / 873, 0.01, d=0.01, n=3)
 

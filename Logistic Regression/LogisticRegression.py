@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 from sklearn.preprocessing import normalize
 
 
@@ -15,8 +15,8 @@ def run_logistic_regression(t="MAP"):
         print("USING HYPER PARAMETERS FOR EACH VARIANCE:")
         for v in variance:
             [weights, loss] = run_sgd(v, gamma, d, t)
-            plt.plot(loss)
-            plt.show()
+            # plt.plot(loss)
+            # plt.show()
 
             [train_error, test_error] = calculate_train_and_test_errors(weights)
             errors.append([v, train_error, test_error])
@@ -44,10 +44,9 @@ def calculate_train_and_test_errors(weights):
 
 
 def calculate_hyperparameters(variance, t):
+    """Finds the hyperparameters with the smallest train error"""
     gammas = [1, 0.1, 0.5, 0.01]
     ds = [1, 0.1, 0.05, 0.01, 0.005]
-    # gammas = [0.5]
-    # ds = [1]
 
     smallest = [0, 100.0, 100.0]
 
@@ -58,10 +57,9 @@ def calculate_hyperparameters(variance, t):
 
 
 def get_smallest_error(smallest, variance, gamma, d, t):
-    # Computes the error for the given parameters and returns the error if it is the smallest, or the previous smallest.
+    """Computes the error for the given parameters. Returns the error, if it is the smallest, or the previous smallest."""
     [weights, _] = run_sgd(variance, gamma, d, t)
 
-    # predictions = np.sign(train_data.dot(weights.T[:, np.newaxis]))
     predictions = np.sign(train_data.dot(weights.T))
     error = calculate_error(train_y, predictions)
     print("GAMMA:", gamma, " D:", d, " ERROR:", error)
@@ -99,6 +97,10 @@ def run_sgd(variance, initial_gamma, d, t, n=872):
     return [weights, loss]
 
 
+def update_learning_rate(initial_gamma, d, epoch):
+    return initial_gamma / (1.0 + epoch * (initial_gamma / d))
+
+
 def shuffle_data(y, data):
     """Shuffles the given data by appending y to the data, then shuffling, then returns the separated data and y."""
     combined = np.c_[data.reshape(len(data), -1), y.reshape(len(y), -1)]
@@ -108,44 +110,37 @@ def shuffle_data(y, data):
     return [shuffled_y, shuffled_data]
 
 
-def calculate_logistic_map_gradient(y, w, x, variance, n=872):
-    z = np.dot(x * w.T, y)
-    # print("Z:", z)
-    sigmoid = calculate_sigmoid(z[0, 0])
-    loss_grad = - n * np.dot(y.T, x) * sigmoid
-    regularization_grad = w/variance
-    return loss_grad + regularization_grad
-
-
-def calculate_logistic_mle_gradient(y, w, x, n=872):
-    z = np.dot(-(x * w.T).T, y)
-    sigmoid = calculate_sigmoid(z[0, 0])
-    return n * np.dot(y.T, x) * sigmoid
-
-
 def calculate_sigmoid(z):
     return 1 / (1 + np.exp(-z))
 
 
+# MAP
+def calculate_logistic_map_gradient(y, w, x, variance, n=872):
+    loss_grad = calculate_logistic_mle_gradient(y, w, x, n)
+    regularization_grad = w/variance
+    return loss_grad + regularization_grad
+
+
 def calculate_map_loss(y, w, x, variance, n=872):
     z = np.dot(-(x * w.T).T, y)
-    # print("Z:", z)
-    inner = 1 + np.exp(z)
-    loss = np.log(inner)
+    loss = np.log(1 + np.exp(z))
     regularization = np.dot(w, w.T) / variance
     return (n * loss + regularization)[0, 0]
 
 
+# MLE
+def calculate_logistic_mle_gradient(y, w, x, n=872):
+    z = np.dot(x * w.T, y)
+    sigmoid = calculate_sigmoid(z[0, 0])
+    return - n * np.dot(y.T, x) * sigmoid
+
+
 def calculate_mle_loss(y, w, x, n=872):
     z = np.dot(-(x * w.T).T, y)
-    inner = 1 + np.exp(z)
-    return (n * np.log(inner))[0, 0]
+    return (n * np.log(1 + np.exp(z)))[0, 0]
 
 
-def update_learning_rate(initial_gamma, d, epoch):
-    return initial_gamma / (1.0 + epoch * (initial_gamma / d))
-
-
+# Import
 def import_data(path, num_examples):
     """Imports the data at the given path to a csv file with the given amount of examples."""
     data = np.empty((num_examples, 4), dtype="float")
