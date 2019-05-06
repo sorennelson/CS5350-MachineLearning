@@ -6,7 +6,7 @@ import numpy as np
 def _run_standard_algorithm(learning_rate=1.0):
     """
     Runs 10 epochs of the Standard Perceptron Algorithm.
-    Calculates and prints the trian error and the test error at each epoch.
+    Calculates and prints the train error and the test error at each epoch.
     """
     weights = np.zeros((1, 4), dtype="float")
     weights = np.asmatrix(weights)
