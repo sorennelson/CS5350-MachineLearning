@@ -1,5 +1,6 @@
 import sys
 import numpy as np
+from sklearn.preprocessing import normalize
 
 
 # Standard
@@ -74,7 +75,7 @@ def _run_voted_algorithm(learning_rate=1.0):
 def _run_voted_epoch(weights, votes, learning_rate, m):
     """
     Runs 10 epochs of the Voted Perceptron Algorithm.
-    Calculates and prints the trian error and the test error at each epoch.
+    Calculates and prints the train error and the test error at each epoch.
     """
     for i in range(train_y.size):
         [y_example, x_example] = _get_example(i, train_y, train_data)
@@ -91,7 +92,7 @@ def _run_voted_epoch(weights, votes, learning_rate, m):
 
 
 def _calculate_voted_predictions(weights, votes, data, y_len):
-    """Runs a single epoch of the Average Perceptron Algorithm"""
+    """Calculates the predictions for the voted algorithm"""
     voted_predictions = np.zeros((1, y_len), dtype=float)
     for i in range(len(votes)):
         prediction = np.sign(weights[i] * np.transpose(data))
@@ -177,6 +178,8 @@ def _import_data(path, num_examples):
                     example.append(float(terms[j]))
             data[i] = example
             i += 1
+
+    data = normalize(np.asmatrix(data), axis=0)
     return [np.asmatrix(data), np.asmatrix(y)]
 
 
