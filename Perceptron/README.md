@@ -34,6 +34,8 @@ Using the bank note dataset described below, the algorithm was able to get an av
 python3 Perceptron.py standard
 ```
 
+
+
 ## Voted Algorithm
 The voted algorithm is similar to the standard except we take into account previous weight vectors. We use the number of correct predictions by that weight vector to weight it. *The learning rate is kept a constant 1.* 
 ### Update
@@ -60,7 +62,7 @@ The below functions work because our labels are {-1, 1}.
 
 
 ### Algorithm In Detail
-1. Initialize the weight vector to zeros
+1. Initialize the weight vector to zeros and m to zero
 2. For t=1...10
 3. Shuffle the data
 4. **For example in training data**:
