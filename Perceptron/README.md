@@ -25,10 +25,10 @@ The below function works because our labels are {-1, 1}.
 After training the model, use the learned weight vector to calculate the error on both the train and test sets.
 <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Error.png" height="75">  
 
-### Results
+#### Results
 Using the bank note dataset described below, the algorithm was able to get an average test set error of 6%.
 
-### How To Run
+#### How To Run
 ```
 python3 Perceptron.py standard
 ```
@@ -72,10 +72,10 @@ The below functions work because our labels are {-1, 1}.
 After training the model, use the learned weight vector to calculate the error on both the train and test sets.
 <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Error.png" height="75">  
 
-### Results
+#### Results
 Using the bank note dataset described below, the algorithm was able to get an average test set error of 5%.
 
-### How To Run
+#### How To Run
 ```
 python3 Perceptron.py voted
 ```
@@ -111,10 +111,10 @@ The below functions work because our labels are {-1, 1}.
 After training the model, use the learned weight vector to calculate the error on both the train and test sets.
 <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Error.png" height="75">  
 
-### Results
+#### Results
 Using the bank note dataset described below, the algorithm was able to get an average test set error of 5%.
 
-### How To Run
+#### How To Run
 ```
 python3 Perceptron.py avg
 ```
