@@ -10,9 +10,8 @@ This is the standard, voted, and averaged Perceptron algorithm for binary classi
 The perceptron is mistake driven, thus we only update when our algorithm incorectly classifies an example.
 <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Update.png" height="75">  
 
-### Pediction
+### Pediction 
 The below function works because our labels are {-1, 1}.  
-
 <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Classification.png" height="75">
 
 ### Algorithm In Detail
@@ -35,7 +34,6 @@ python3 Perceptron.py standard
 ```
 
 
-
 ## Voted Algorithm
 The voted algorithm is similar to the standard except we take into account previous weight vectors. We use the number of correct predictions by that weight vector to weight it. *The learning rate is kept a constant 1.* 
 ### Update
@@ -52,7 +50,7 @@ The voted algorithm is similar to the standard except we take into account previ
 
 ### Prediction
 The below functions work because our labels are {-1, 1}.  
-#### For a given vote  
+#### For a given weight vector  
 
 <img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Classification.png" height="75">  
 
@@ -82,6 +80,44 @@ Using the bank note dataset described below, the algorithm was able to get an av
 python3 Perceptron.py voted
 ```
 
+
+## Averaged Algorithm
+The averaged algorithm is similar to the voted algorithm except we take into account the scale of the previous weight vectors. This is different from the voted algorithm where we only care about the number of correct predictions by a weight vector. *The learning rate is kept a constant 1.* 
+### Update
+
+<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Update.png" height="75">  
+
+
+### Prediction
+The below functions work because our labels are {-1, 1}.  
+#### For a given weight vector  
+
+<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Classification.png" height="75">  
+
+#### Average Prediction  
+
+<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Average_prediction.png" height="75">
+
+
+### Algorithm In Detail
+1. Initialize the weight vector to zeros and a to zero
+2. For t=1...10
+3. Shuffle the data
+4. **For example in training data**:
+    1. If the weight vector incorrectly classifies the example (i.e. the prediction doesn't equal the actual label):
+        1. Update the weight vector
+    2. Add the weight vector to a
+#### Testing
+After training the model, use the learned weight vector to calculate the error on both the train and test sets.
+<img src="https://github.com/solosoren/CS5350-MachineLearning/blob/master/Perceptron/Images/Error.png" height="75">  
+
+### Results
+Using the bank note dataset described below, the algorithm was able to get an average test set error of 5%.
+
+### How To Run
+```
+python3 Perceptron.py avg
+```
 
 
 ## Data
