@@ -1,0 +1,92 @@
+import sys
+import numpy as np
+import keras
+from keras.models import Sequential
+from keras.layers import Dense, Activation
+from sklearn.preprocessing import normalize
+
+
+def run_nn(activation, lowest):
+    """
+    Trains and tests models for each depth, width below. Prints the model with the best accuracy and width/depth
+    :param activation: Either "relu" or "tanh"
+    :param lowest: "depth" - prefers models with smaller depth
+                    "width" - prefers models with smaller width
+    """
+    best = [0., 0., 0.]
+    for depth in [3, 5, 9]:
+        for width in [5, 10, 25, 50, 100]:
+            best = train_and_test_model(depth, width, activation, best, lowest)
+
+    print("-- HIGHEST: DEPTH", best[0], ", WIDTH", best[1], ", ACCURACY", best[2])
+
+
+def train_and_test_model(curr_depth, curr_width, act_func, highest_acc, smallest):
+    # Return the highest accuracy model with the smallest width/depth
+
+    model = create_keras_nn_model(curr_depth, curr_width, act_func)
+
+    # Train
+    model.fit(train_data, train_labels, epochs=10, verbose=0)
+
+    # Test
+    evaluation = model.evaluate(test_data, test_labels, verbose=0)
+    accuracy = evaluation[1]
+
+    print("DEPTH", curr_depth, ", WIDTH", curr_width, ", ACCURACY", accuracy)
+
+    if smallest == 'width' and is_smallest_width_model(curr_width, accuracy, highest_acc):
+        return [curr_depth, curr_width, accuracy]
+
+    elif smallest == 'depth' and is_smallest_depth_model(curr_depth, accuracy, highest_acc):
+        return [curr_depth, curr_width, accuracy]
+
+    else:
+        return highest_acc
+
+
+def is_smallest_width_model(curr_width, accuracy, highest_acc):
+    return accuracy > highest_acc[-1] \
+            or (accuracy == highest_acc[-1] and curr_width < highest_acc[1])
+
+
+def is_smallest_depth_model(curr_depth, accuracy, highest_acc):
+    return accuracy > highest_acc[-1] \
+            or (accuracy == highest_acc[-1] and curr_depth < highest_acc[0])
+
+
+def create_keras_nn_model(curr_depth, curr_width, act_func):
+    model = Sequential()
+    if act_func == 'relu': initializer = keras.initializers.he_normal()
+    else: initializer = keras.initializers.glorot_normal()
+
+    # Add layers
+    for _ in range(curr_depth - 1):
+        model.add(Dense(curr_width, activation=Activation(act_func), kernel_initializer=initializer))
+    model.add(Dense(1, activation=Activation('sigmoid'), kernel_initializer=initializer))
+
+    # Set loss and optimizer
+    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    return model
+
+
+def import_data():
+    train_data = np.genfromtxt("bank-note/train.csv", delimiter=",")
+    test_data = np.genfromtxt("bank-note/test.csv", delimiter=',')
+
+    x_train = train_data[:, :-1]
+    y_train = train_data[:, -1]
+    x_test = test_data[:, :-1]
+    y_test = test_data[:, -1]
+
+    # Normalize data
+    x_train = normalize(x_train, axis=0)
+    x_test = normalize(x_test, axis=0)
+
+    return [x_train, y_train, x_test, y_test]
+
+
+if __name__ == '__main__':
+    [train_data, train_labels, test_data, test_labels] = import_data()
+    print("ACTIVATION FUNCTION", sys.argv[1], ", PREFERS SMALLER", sys.argv[2])
+    run_nn(sys.argv[1], sys.argv[2])
